@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: vipmro-bosp-dxp
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: vipmro-athena-config
+
+eureka:
+  username: vipmro
+  password: vipmro
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.username}:${eureka.password}@${eureka.host:registry.athena.vipmro.org}:${eureka.port:8761}/eureka/
+
+---
+# 开发环境
+spring:
+  profiles: dev,dev-64
+eureka:
+  host: 192.168.1.44
+
+---
+# 预发布环境
+spring:
+  profiles: pre
+eureka:
+  host: registry.athena.pre.vipmro.org

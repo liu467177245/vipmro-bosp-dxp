@@ -1,0 +1,49 @@
+0x000001:
+  msg: 系统错误_2
+  solution: 请您联系管理员
+  description: 不可预知
+
+-0x1000:
+  msg: 未知错误_2
+  solution: 请xxxxx
+  description: 不可预知tttt
+
+0x000101:
+  msg: 表单验证错误
+  solution: 请您根据系统提示正确填写表单
+  description: 请您根据系统提示正确填写表单
+
+0x000102:
+  msg: 系统验证错误
+  solution: 联系管理员
+  description: 联系管理员
+
+0x001000:
+  msg: 参数错误,查看body内容
+  solution: 请您联系管理员
+  desc: 不可预知
+
+0x001001:
+  msg: 上传文件格式错误
+  solution: 请您联系管理员
+  description: 不可预知
+
+0x0001010:
+  msg: 上传文件超出大小限制
+  solution: 请您联系管理员
+  description: 不可预知
+
+0x002001:
+  msg: code编码深度超过8层
+  solution: 请您联系管理员
+  desc: 不可预知
+
+0x002002:
+  msg: code编码长度2-4 批量大小50
+  solution: 请您联系管理员
+  desc: 不可预知
+
+0x003001:
+  msg: 未登录
+  solution: 请登录
+  desc: 需要进行登录操作

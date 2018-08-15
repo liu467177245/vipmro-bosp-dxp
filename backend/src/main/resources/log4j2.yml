@@ -1,0 +1,68 @@
+Configuration:
+  status: warn
+
+  Properties: # 定义全局变量
+    Property: # 缺省配置（用于开发环境）。其他环境需要在VM参数中指定，如下：
+      - name: root.level
+        value: info
+      - name: console.level
+        value: trace
+      - name: bosp.level
+        value: debug
+      - name: kafka.level
+        value: info
+      - name: log.path
+        value: logs
+      - name: project.name
+        value: bosp-dxp
+
+  Appenders:
+    Console: #输出到控制台
+      name: CONSOLE
+      target: SYSTEM_OUT
+      ThresholdFilter:
+        level: ${console.level}
+        onMatch: ACCEPT
+        onMismatch: DENY
+      PatternLayout:
+        pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS}\t%highlight{%5p} %magenta{${sys:PID}} --- [%15.15t] %cyan{%.40c{1.}} : %m%n"
+    RollingFile: # 输出到文件，超过128MB归档
+      - name: ROLLING_FILE
+        ignoreExceptions: false
+        fileName: ${log.path}/${project.name}.log
+        filePattern: ${log.path}/${date:yyyy-MM}/${project.name}-%d{yyyy-MM-dd}-%i.log.gz
+        PatternLayout:
+          pattern: "%d{yyyy-MM-dd HH:mm:ss,SSS}\t%5p --- [%15.15t] %c{1.} : %m%n"
+        Policies:
+          OnStartupTriggeringPolicy: {}
+          SizeBasedTriggeringPolicy:
+            size: "128 MB"
+        DefaultRolloverStrategy:
+          max: 100
+    Kafka: # 输出到Kafka
+      - name: KAFKA_OUT
+        topic: ${env:LOG_KAFKA_TOPIC:-log-topic}
+        PatternLayout:
+          pattern: "%date %message"
+        Property:
+          - name: bootstrap.servers
+            value: ${env:LOG_KAFKA_SERVERS:-192.168.1.55:9092}
+
+  Loggers:
+    Root:
+      level: ${root.level}
+      AppenderRef:
+        - ref: CONSOLE
+        - ref: ROLLING_FILE
+    Logger:
+      - name: net.vipmro.bosp.dxp # 按包名输出
+        additivity: false
+        level: ${bosp.level}
+        AppenderRef:
+          - ref: CONSOLE
+#          - ref: ROLLING_FILE
+      - name: kafkaLog  # 按名称输出
+        additivity: false
+        level: ${kafka.level}
+        AppenderRef:
+          - ref: KAFKA_OUT

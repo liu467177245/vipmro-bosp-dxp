@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>net.vipmro.bosp.dxp</groupId>
+		<artifactId>vipmro-bosp-dxp-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<groupId>net.vipmro.bosp.dxp</groupId>
+	<artifactId>vipmro-bosp-dxp</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name>vipmro-bosp-dxp</name>
+	<description>The version dxp with the new UI based on VueJS.</description>
+
+	<properties>
+		<start.class>net.vipmro.bosp.dxp.DxpServer</start.class>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<jgitflow.maven.version>1.0-m5.1</jgitflow.maven.version>
+
+		<spring.boot.version>1.5.13.RELEASE</spring.boot.version>
+		<hades.dependencies.version>0.9.9</hades.dependencies.version>
+		<bosp.boot.starter.version>0.8.9</bosp.boot.starter.version>
+	</properties>
+
+	<build>
+		<!--
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        -->
+		<resources>
+			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+				<filtering>false</filtering>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+		</resources>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<version>${spring.boot.version}</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>repackage</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<mainClass>${start.class}</mainClass>
+						<layout>ZIP</layout>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>external.atlassian.jgitflow</groupId>
+				<artifactId>jgitflow-maven-plugin</artifactId>
+				<version>${jgitflow.maven.version}</version>
+				<configuration>
+					<!-- Enable this to push to origin using SSH keys -->
+					<enableSshAgent>true</enableSshAgent>
+					<!-- Keep your maven submodules at the same version as the parent POM -->
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<!--
+                      Pusing in-development features to origin allows all devs to see what each other
+                      are working on
+                    -->
+					<pushFeatures>true</pushFeatures>
+					<!--
+                      This allows the CI server (e.g. Jenkins) to automatically push new releases to
+                      origin; you can then either manually deploy them or, if you are doing Continuous
+                      Deployments, auto-deploy them to prod
+                    -->
+					<pushReleases>true</pushReleases>
+					<!--
+                      Hot Fixes should be pushed to origin as well so that any dev can pick them up
+                    -->
+					<pushHotfixes>true</pushHotfixes>
+					<!--
+                      Prevents deployments from dev workstations so that they can be done by a CI
+                      server
+                    -->
+					<noDeploy>true</noDeploy>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>net.vipmro.hades</groupId>
+				<artifactId>vipmro-hades-dependencies</artifactId>
+				<version>${hades.dependencies.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.vipmro.bosp</groupId>
+			<artifactId>vipmro-bosp-boot-starter</artifactId>
+			<version>${bosp.boot.starter.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.vipmro.athena</groupId>
+			<artifactId>vipmro-athena-argus-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.vipmro.athena</groupId>
+			<artifactId>vipmro-athena-principal-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.vipmro.athena</groupId>
+			<artifactId>vipmro-athena-multipart-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.vipmro.athena</groupId>
+			<artifactId>vipmro-athena-dict-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.vipmro.athena</groupId>
+			<artifactId>vipmro-athena-log-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.vipmro.athena</groupId>
+			<artifactId>vipmro-athena-scheduler-common</artifactId>
+		</dependency>
+
+		<!-- httpclient -->
+		<dependency>
+			<groupId>io.github.openfeign</groupId>
+			<artifactId>feign-httpclient</artifactId>
+		</dependency>
+
+		<!-- poi -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+		</dependency>
+
+		<!-- kafka -->
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-clients</artifactId>
+		</dependency>
+
+		<!-- test -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

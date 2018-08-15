@@ -1,0 +1,59 @@
+server:
+  port: 9175
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+
+config:
+  oauth:
+    app-id: portal
+    service-id:
+    app-key: bosp-dxp
+
+file:
+  url-domain: http://192.168.1.60:9999
+  white-filter: doc,doxc,xls,xlsx,pdf,jpg,jpeg,gif,bmp,png,wmv
+
+database:
+  redis:
+    index: 1
+    host: localhost
+    port: 6379
+    requirepass: vip123~mro
+
+spring:
+  redis:
+    database: ${database.redis.index}
+    host: ${database.redis.host}
+    port: ${database.redis.port}
+    password: ${database.redis.requirepass}
+    timeout: 30000
+
+  rabbitmq:
+    addresses: localhost:5672
+    username: vipmro
+    password: vipmro
+    publisher-confirms: true
+    virtualHost: /
+
+  resources:
+    static-locations: file:webapp
+
+  http:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+lts:
+  tasktracker:
+    node-group: test-scheduler-service
+    job-name: vipmroTask
+    url-prefix: http://vipmro-hades-dxp
+
+uedit-config:
+  image-url-prefix: ${file.url-domain}
