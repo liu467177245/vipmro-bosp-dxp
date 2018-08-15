@@ -1,0 +1,186 @@
+@font-face {
+  font-family: 'mall';
+  src:  url('../fonts/mall.eot?4c0j2m');
+  src:  url('../fonts/mall.eot?4c0j2m#iefix') format('embedded-opentype'),
+    url('../fonts/mall.ttf?4c0j2m') format('truetype'),
+    url('../fonts/mall.woff?4c0j2m') format('woff'),
+    url('../fonts/mall.svg?4c0j2m#mall') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="mall-"], [class*=" mall-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'mall' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.mall-add-shopcart:before {
+  content: "\e900";
+}
+.mall-brand-checked:before {
+  content: "\e901";
+}
+.mall-category-off:before {
+  content: "\e902";
+}
+.mall-category-on:before {
+  content: "\e903";
+}
+.mall-checked:before {
+  content: "\e904";
+}
+.mall-close:before {
+  content: "\e905";
+}
+.mall-close-button:before {
+  content: "\e906";
+}
+.mall-close-nobg:before {
+  content: "\e907";
+}
+.mall-collection:before {
+  content: "\e908";
+}
+.mall-collect-off:before {
+  content: "\e909";
+}
+.mall-collect-on:before {
+  content: "\e90a";
+}
+.mall-consignee-address:before {
+  content: "\e90b";
+}
+.mall-data:before {
+  content: "\e90c";
+}
+.mall-delete:before {
+  content: "\e90d";
+}
+.mall-down:before {
+  content: "\e90e";
+}
+.mall-edit:before {
+  content: "\e90f";
+}
+.mall-faceprice-off:before {
+  content: "\e910";
+}
+.mall-faceprice-on:before {
+  content: "\e911";
+}
+.mall-filter:before {
+  content: "\e912";
+}
+.mall-forget:before {
+  content: "\e913";
+}
+.mall-index-off:before {
+  content: "\e914";
+}
+.mall-index-on:before {
+  content: "\e915";
+}
+.mall-make-order:before {
+  content: "\e916";
+}
+.mall-minus:before {
+  content: "\e917";
+}
+.mall-my-address:before {
+  content: "\e918";
+}
+.mall-my-collect:before {
+  content: "\e919";
+}
+.mall-my-info:before {
+  content: "\e91a";
+}
+.mall-my-invoice:before {
+  content: "\e91b";
+}
+.mall-my-password:before {
+  content: "\e91c";
+}
+.mall-my-service:before {
+  content: "\e91d";
+}
+.mall-next:before {
+  content: "\e91e";
+}
+.mall-open-button:before {
+  content: "\e91f";
+}
+.mall-order:before {
+  content: "\e920";
+  color: #a9a9a9;
+}
+.mall-order-down:before {
+  content: "\e921";
+}
+.mall-order-up:before {
+  content: "\e922";
+}
+.mall-payment:before {
+  content: "\e923";
+  color: #a9a9a9;
+}
+.mall-phone:before {
+  content: "\e924";
+}
+.mall-search:before {
+  content: "\e925";
+}
+.mall-service:before {
+  content: "\e926";
+}
+.mall-service-tel:before {
+  content: "\e927";
+}
+.mall-shipment:before {
+  content: "\e928";
+  color: #a9a9a9;
+}
+.mall-shipped:before {
+  content: "\e929";
+  color: #a9a9a9;
+}
+.mall-shopcart-goods-off:before {
+  content: "\e92a";
+}
+.mall-shopcart-goods-on:before {
+  content: "\e92b";
+}
+.mall-shopcart-icon:before {
+  content: "\e92c";
+}
+.mall-shopcart-off:before {
+  content: "\e92d";
+}
+.mall-shopcart-on:before {
+  content: "\e92e";
+}
+.mall-title-icon:before {
+  content: "\e92f";
+}
+.mall-up:before {
+  content: "\e930";
+}
+.mall-user-off:before {
+  content: "\e931";
+}
+.mall-user-on:before {
+  content: "\e932";
+}
+.mall-weixin-pay:before {
+  content: "\e933";
+}
