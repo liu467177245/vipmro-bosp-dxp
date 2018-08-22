@@ -1,0 +1,22 @@
+export const GOODS_AUTH = {
+  save: false,
+  saveUsed: false,
+  add: false,
+  copy: false,
+  enabled: false,
+  disabled: false,
+  forbidPurchase: false,
+  used: false,
+  'delete': false,
+  goodsImport: false,
+  purchaseImport: false,
+  packageImport: false,
+  goodsExport: false,
+  tempSave: false,
+  tempGoodsImport: false,
+  attrGoodsImport: false,
+  repeatGoodsSearch: false,
+  batchSearchGoods: false,
+  goodsSync: false,
+  goodsSyncImport: false
+};

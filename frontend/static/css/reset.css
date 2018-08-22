@@ -90,9 +90,9 @@ body {
     clear: both;
 }
 
-input {
-    -webkit-appearance: none;
-}
+/*input {*/
+    /*-webkit-appearance: none;*/
+/*}*/
 
 .hide {
     display: none;

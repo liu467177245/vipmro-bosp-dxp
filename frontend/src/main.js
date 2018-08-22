@@ -5,6 +5,8 @@ import Resource from 'vue-resource';
 import vipmroUi from 'vipmro-webui';
 import 'vipmro-webui/lib/theme-chalk/index.css';
 import Index from '@/components/index/index';
+import DataRule from '@/components/dataRule/index';
+
 // import Select from '@/components/select/index';
 
 import '@/common/css/style';
@@ -23,6 +25,11 @@ const router = new Router({
       path: '/',
       name: 'Index',
       component: Index
+    },
+    {
+      path: '/dataRule',
+      name: 'dataRule',
+      component: DataRule
     }
   ]
 });
