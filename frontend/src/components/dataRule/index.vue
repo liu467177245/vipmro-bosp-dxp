@@ -48,6 +48,7 @@
                 <div class="vipmro-add-html">
                   <vipmro-add-html
                     v-model="form.conditionFiledList"
+                    :isLastShowMinus="true"
                   >
                     <template slot-scope="props">
                       <VipmroCols :cols="24">
@@ -75,6 +76,7 @@
                 <div class="vipmro-add-html">
                   <vipmro-add-html
                     v-model="form.targetFiledList"
+                    :isLastShowMinus="true"
                   >
                     <template slot-scope="props">
                       <VipmroCols :cols="24">
@@ -187,7 +189,7 @@
             }
         });
       },
-      del(id) {
+      del() {
         this.openBatch(-1, '确定删除所选数据？');
       },
       openBatch(status, msg) {

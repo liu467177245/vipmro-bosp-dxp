@@ -6,7 +6,7 @@ import vipmroUi from 'vipmro-webui';
 import 'vipmro-webui/lib/theme-chalk/index.css';
 import Index from '@/components/index/index';
 import DataRule from '@/components/dataRule/index';
-
+import ProjectList from '@/components/projectList/index';
 // import Select from '@/components/select/index';
 
 import '@/common/css/style';
@@ -30,6 +30,11 @@ const router = new Router({
       path: '/dataRule',
       name: 'dataRule',
       component: DataRule
+    },
+    {
+      path: '/projectList',
+      name: 'projectList',
+      component: ProjectList
     }
   ]
 });

@@ -21,3 +21,10 @@ export const API_DATA_RULE = {
   delete: `${baseApi}/v1.0.0/rule/delete`,
   update: `${baseApi}/v1.0.0/rule/update`
 };
+export const API_PROJECT = {
+  list: `${baseApi}/v1.0.0/project/list`,
+  add: `${baseApi}/v1.0.0/project/add`,
+  delete: `${baseApi}/v1.0.0/project/delete`,
+  update: `${baseApi}/v1.0.0/project/update`
+};
+
