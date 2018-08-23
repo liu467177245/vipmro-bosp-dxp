@@ -10,43 +10,41 @@ export let table = {
   currentPage: 1,
   pageSize: 20,
   total: null,
-  colHeaders: ['', 'id', '项目名称', '数据获取方式', '立即返回', '更新人', '更新时间', '创建人', '创建时间'],
+  colHeaders: ['', 'id', '项目名称', '数据获取方式', '状态', '同步/异步', '更新人', '更新时间', '创建人', '创建时间'],
   columns: [{
     data: 'checked',
     cellType: 'checkbox',
     width: '50'
   }, {
     data: 'id',
-    cellType: 'number',
+    type: 'text',
     width: '200'
   }, {
     data: 'name',
-    cellType: 'text',
-    width: '200'
+    width: '300'
   }, {
     data: 'obtainDataType',
-    cellType: 'text',
-    width: '200'
+    type: 'text',
+    width: '100'
+  }, {
+    data: 'status',
+    type: 'text',
+    width: '100'
   }, {
     data: 'needSynBack',
     cellType: 'text',
-    width: '200'
+    width: '100'
   }, {
     data: 'updateUser',
-    width: '200',
-    /* 下拉 */
-    cellType: 'text'
+    width: '150'
   }, {
     data: 'updateDatetime',
-    cellType: 'text',
     width: '200'
   }, {
     data: 'createUser',
-    cellType: 'text',
-    width: '200'
+    width: '150'
   }, {
     data: 'createDatetime',
-    cellType: 'text',
     width: '200'
   }],
   data: []
@@ -57,19 +55,47 @@ export let button = {
     disabled: false,
     method: 'search'
   },
-  add: {
-    name: buttonName.add,
-    disabled: false,
-    method: 'add'
-  },
   del: {
     name: buttonName.del,
     disabled: false,
     method: 'del'
+  },
+  enabled: {
+    name: buttonName.start,
+    disabled: false,
+    method: 'start'
+  },
+  disabled: {
+    name: buttonName.stop,
+    disabled: false,
+    method: 'stop'
   }
 };
 export let editHeight = {
   top: 0,
   bottom: 0,
   detailHeight: 0
+};
+export let dict = {
+  status: [{
+    value: 1,
+    text: '运行中'
+  }, {
+    value: 4,
+    text: '停止'
+  }],
+  obtainDataType: [{
+    value: 1,
+    text: '主动'
+  }, {
+    value: 2,
+    text: '被动'
+  }],
+  needSynBack: [{
+    value: true,
+    text: '同步'
+  }, {
+    value: false,
+    text: '异步'
+  }]
 };

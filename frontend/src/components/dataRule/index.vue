@@ -100,9 +100,9 @@
       </template>
     </vipmro-tab>
 
-    <vipmro-dialog :iconType="dialogObj.iconType" :title="dialogObj.title" v-model="dialogObj.dialogVisible"
+    <vipmro-dialog :iconType="deleteDialog.iconType" :title="deleteDialog.title" v-model="deleteDialog.dialogVisible"
                    @confirm="updateStatus" width="400px" :content="DIALOG_CONTENT">
-      {{dialogObj.text}}
+      {{deleteDialog.text}}
     </vipmro-dialog>
 
   </div>
@@ -124,7 +124,7 @@
         pagingPage: 1,
         saveBtnShow: false,
         form: JSON.parse(JSON.stringify(detailForm)),
-        dialogObj: {
+        deleteDialog: {
           dialogVisible: false,
           title: '提示',
           iconType: 'warning',
@@ -171,7 +171,6 @@
           if (item.checked) {
             ids = ids + item.id + ',';
           }
-          console.log(item.id);
         });
         if (ids === '') {
           this.$message({type: 'error', message: '请至少选择一条数据', showClose: true});
@@ -203,9 +202,9 @@
           this.$message({type: 'error', message: '请至少选择一条数据', showClose: true});
           return;
         }
-        this.dialogObj.dialogVisible = true;
-        this.dialogObj.text = msg;
-        this.dialogObj.status = status;
+        this.deleteDialog.dialogVisible = true;
+        this.deleteDialog.text = msg;
+        this.deleteDialog.status = status;
       },
       search(currentPage, pageSize) {
         if (currentPage) {

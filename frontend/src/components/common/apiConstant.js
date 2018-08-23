@@ -25,6 +25,8 @@ export const API_PROJECT = {
   list: `${baseApi}/v1.0.0/project/list`,
   add: `${baseApi}/v1.0.0/project/add`,
   delete: `${baseApi}/v1.0.0/project/delete`,
-  update: `${baseApi}/v1.0.0/project/update`
+  update: `${baseApi}/v1.0.0/project/update`,
+  start: `${baseApi}/v1.0.0/project/start`,
+  stop: `${baseApi}/v1.0.0/project/stop`
 };
 

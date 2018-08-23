@@ -25,6 +25,8 @@ export const buttonName = {
   edit: '编辑',
   enabled: '启用',
   disabled: '禁用',
+  start: '启动',
+  stop: '停止',
   import: '导入',
   export: '导出',
   show: '显示',
