@@ -29,9 +29,9 @@
       </template>
     </vipmro-tab>
 
-    <vipmro-dialog :iconType="deleteDialog.iconType" :title="deleteDialog.title" v-model="deleteDialog.dialogVisible"
+    <vipmro-dialog :iconType="detailDialog.iconType" :title="detailDialog.title" v-model="detailDialog.dialogVisible"
                    @confirm="updateStatus" width="400px" :content="DIALOG_CONTENT">
-      {{deleteDialog.text}}
+      {{detailDialog.text}}
     </vipmro-dialog>
     <vipmro-dialog :iconType="stopDialog.iconType" :title="stopDialog.title" v-model="stopDialog.dialogVisible"
                    @confirm="stopProject" width="400px" :content="DIALOG_CONTENT">
@@ -56,7 +56,7 @@
         table,
         dict,
         editHeight,
-        deleteDialog: {
+        detailDialog: {
           dialogVisible: false,
           title: '提示',
           iconType: 'warning',
@@ -215,9 +215,9 @@
           this.$message({type: 'error', message: '请至少选择一条数据', showClose: true});
           return;
         }
-        this.deleteDialog.dialogVisible = true;
-        this.deleteDialog.text = msg;
-        this.deleteDialog.status = status;
+        this.detailDialog.dialogVisible = true;
+        this.detailDialog.text = msg;
+        this.detailDialog.status = status;
       },
       updateStatus(status, msg) {
         let ids = '';

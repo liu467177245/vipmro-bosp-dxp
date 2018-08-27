@@ -29,4 +29,7 @@ export const API_PROJECT = {
   start: `${baseApi}/v1.0.0/project/start`,
   stop: `${baseApi}/v1.0.0/project/stop`
 };
+export const API_LOG_REQUEST = {
+  list: `${baseApi}/v1.0.0/logRequest/list`
+};
 
