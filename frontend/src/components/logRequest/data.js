@@ -25,7 +25,7 @@ export let table = {
     /* 下拉 */
     cellType: 'text'
   }, {
-    data: 'content',
+    data: 'highlightContent',
     cellType: 'html',
     width: '1120'
   }, {
