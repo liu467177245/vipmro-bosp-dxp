@@ -5,6 +5,9 @@ export let table = {
   list: [{
     title: '列表',
     name: 'list'
+  }, {
+    title: '详情',
+    name: 'detail'
   }],
   keyword: null,
   currentPage: 1,

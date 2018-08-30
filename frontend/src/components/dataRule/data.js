@@ -87,6 +87,7 @@ export let button = {
 };
 export let detailForm = {
   id: null,
+  projectId: null,
   name: '',
   conditionFiledList: [],
   targetFiledList: []

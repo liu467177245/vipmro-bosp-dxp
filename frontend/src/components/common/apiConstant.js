@@ -23,11 +23,24 @@ export const API_DATA_RULE = {
 };
 export const API_PROJECT = {
   list: `${baseApi}/v1.0.0/project/list`,
+  detail: `${baseApi}/v1.0.0/project/detail`,
   add: `${baseApi}/v1.0.0/project/add`,
   delete: `${baseApi}/v1.0.0/project/delete`,
   update: `${baseApi}/v1.0.0/project/update`,
   start: `${baseApi}/v1.0.0/project/start`,
   stop: `${baseApi}/v1.0.0/project/stop`
+};
+export const API_DATA_TREE_INPUT = {
+  update: `${baseApi}/v1.0.0/dataTree/input/update`,
+  detail: `${baseApi}/v1.0.0/dataTree/input/detail`,
+  add: `${baseApi}/v1.0.0/dataTree/input/add`,
+  delete: `${baseApi}/v1.0.0/dataTree/input/delete`
+};
+export const API_DATA_TREE_OUTPUT = {
+  update: `${baseApi}/v1.0.0/dataTree/output/update`,
+  detail: `${baseApi}/v1.0.0/dataTree/output/detail`,
+  add: `${baseApi}/v1.0.0/dataTree/output/add`,
+  delete: `${baseApi}/v1.0.0/dataTree/output/delete`
 };
 export const API_LOG_REQUEST = {
   list: `${baseApi}/v1.0.0/logRequest/list`
