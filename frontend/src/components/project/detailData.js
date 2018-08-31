@@ -44,7 +44,10 @@ export let detail = {
       connectParamsList: []
     },
     outputProtocol: {
-
+      id: null,
+      type: null,
+      name: null,
+      connectParamsList: []
     },
     callBack: {
       id: null,
@@ -99,6 +102,22 @@ export let radios = {
 };
 export let select = {
   connectIn: {
+    selectValue: 0,
+    selectOptions: [{
+      value: 1,
+      text: 'http'
+    }, {
+      value: 2,
+      text: 'https'
+    }, {
+      value: 3,
+      text: 'ftp'
+    }, {
+      value: 4,
+      text: 'sftp'
+    }]
+  },
+  connectOut: {
     selectValue: 0,
     selectOptions: [{
       value: 1,
@@ -186,9 +205,47 @@ export let select = {
       value: 9,
       text: 'Object[]'
     }]
+  },
+  filterType: {
+    selectValue: 1,
+    selectOptions: [{
+      value: 1,
+      text: '隐藏手机号码'
+    }, {
+      value: 2,
+      text: '隐藏身份证'
+    }]
   }
 };
-export let connect = {
+export let connectIn = {
+  http: {
+    url: '',
+    heads: [],
+    params: []
+  },
+  https: {
+    url: '',
+    heads: [],
+    params: []
+  },
+  ftp: {
+    host: null,
+    port: null,
+    filePath: '',
+    fileName: '',
+    account: '',
+    password: ''
+  },
+  sftp: {
+    host: null,
+    port: null,
+    filePath: '',
+    fileName: '',
+    account: '',
+    password: ''
+  }
+};
+export let connectOut = {
   http: {
     url: '',
     heads: [],
@@ -217,6 +274,19 @@ export let connect = {
   }
 };
 export let inputTree = {
+  /* 节点参数 */
+  props: {
+    children: 'children',
+    label: 'name'
+  },
+  /* 不允许拖拽的节点 */
+  forbitDrag: [],
+  /* 拖拽不允许放置的节点 */
+  forbitDrop: [],
+  /* 默认展开的节点 */
+  defaultExpandedKeys: []
+};
+export let outputTree = {
   /* 节点参数 */
   props: {
     children: 'children',
@@ -282,6 +352,11 @@ export let ruleButton = {
     disabled: false,
     method: 'addRule'
   },
+  import: {
+    name: buttonName.import,
+    disabled: false,
+    method: 'importRule'
+  },
   del: {
     name: buttonName.del,
     disabled: false,
@@ -299,5 +374,47 @@ export let ruleEditHeight = {
   top: 0,
   bottom: 0,
   detailHeight: 0
+};
+export let ruleImportTable = {
+  domain: 'vipmro.net',
+  dialogShow: false,
+  colHeaders: ['', 'id', '规则名称', '更新人', '更新时间', '创建人', '创建时间'],
+  columns: [{
+    data: 'checked',
+    cellType: 'checkbox',
+    width: '50'
+  }, {
+    data: 'id',
+    cellType: 'number',
+    width: '200'
+  }, {
+    data: 'name',
+    cellType: 'text',
+    width: '200'
+  }, {
+    data: 'updateUser',
+    width: '200',
+    /* 下拉 */
+    cellType: 'text'
+  }, {
+    data: 'updateDatetime',
+    cellType: 'text',
+    width: '200'
+  }, {
+    data: 'createUser',
+    cellType: 'text',
+    width: '200'
+  }, {
+    data: 'createDatetime',
+    cellType: 'text',
+    width: '200'
+  }],
+  data: [],
+  total: null,
+  currentPage: 1,
+  pageSize: 20,
+  dataDicts: [],
+  type: 1,
+  width: '1000px'
 };
 

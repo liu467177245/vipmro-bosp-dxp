@@ -12,12 +12,13 @@ export const API_BASE = {
 };
 
 /**
- * 店铺
+ *
  * @type {{list: string, add: string, delete: string, update: string}}
  */
 export const API_DATA_RULE = {
   list: `${baseApi}/v1.0.0/rule/list`,
   add: `${baseApi}/v1.0.0/rule/add`,
+  import: `${baseApi}/v1.0.0/rule/import`,
   delete: `${baseApi}/v1.0.0/rule/delete`,
   update: `${baseApi}/v1.0.0/rule/update`
 };

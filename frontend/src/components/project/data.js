@@ -53,6 +53,11 @@ export let table = {
   data: []
 };
 export let button = {
+  add: {
+    name: buttonName.add,
+    disabled: false,
+    method: 'add'
+  },
   search: {
     name: buttonName.search,
     disabled: false,

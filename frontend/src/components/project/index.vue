@@ -1,3 +1,16 @@
+<style>
+  .custom-tree-node:hover{
+    background-color: yellowgreen;
+  }
+  .is-current .el-tree-node__content .el-tree-node__label:first-child{
+    background-color: yellowgreen;
+  }
+
+  .vipmro-json-editor{
+    width: 100%!important;
+  }
+</style>
+
 <template>
   <div class="webui-tab">
     <vipmro-tab :position="table.position" :list="table.list" v-model="table.position">
@@ -36,97 +49,448 @@
 
           <vipmro-tab v-model="detailTabPosition" :list="detailTableList">
             <template slot="baseInfo">
-              <vipmro-form-validator :value="detailForm">
-                <vipmro-cols :cols="24">
-                <vipmro-form-item type="name" title="项目名称">
-                  <vipmro-input v-model="detailForm.name" :top="2" width="220"
-                                :readonly="!saveBtnShow"></vipmro-input>
-                </vipmro-form-item>
-                </vipmro-cols>
-                <vipmro-cols>
-                  <vipmro-form-item type="describe" title="项目描述">
-                  <vipmro-textarea v-model="detailForm.describe"
-                                   :top="2"
-                                   width="500"
-                                   :rows=10
-                                   :changeBackground="true"
-                                   :readonly="!saveBtnShow"></vipmro-textarea>
-                  </vipmro-form-item>
-                </vipmro-cols>
-                <vipmro-cols>
-                  <vipmro-form-item type="needSynBack" title="同步返回">
-                    <vipmro-radio
-                      :top="0"
-                      :options="radios.needSynBack.radioOptions"
-                      v-model="detailForm.needSynBack"
-                      @change="callBackChange"
-                    ></vipmro-radio>
-                  </vipmro-form-item>
-                </vipmro-cols>
-                <div v-show="callBackShow">
-                  <vipmro-cols>
-                    <vipmro-form-item type="url" title="回调地址">
-                      <vipmro-input v-model="detailForm.callBack.address"
-                                    :top="2"
-                                    width="220"
-                                    :changeBackground="true"
+              <vipmro-layout-top v-model="ruleEditHeight.top">
+                <vipmro-operation-button>
+                  <vipmro-button :title="'保存'" @click="saveProject" :disabled="!saveBtnShow"></vipmro-button>
+                </vipmro-operation-button>
+              </vipmro-layout-top>
+              <vipmro-layout-main>
+                <vipmro-form-validator :value="detailForm">
+                  <vipmro-cols :cols="24">
+                    <vipmro-form-item type="name" title="项目名称">
+                      <vipmro-input v-model="detailForm.name" :top="2" width="220"
                                     :readonly="!saveBtnShow"></vipmro-input>
                     </vipmro-form-item>
                   </vipmro-cols>
                   <vipmro-cols>
-                    <vipmro-form-item title="自定义参数">
-                      <div class="vipmro-add-html">
-                        <vipmro-add-html v-model="detailForm.callBack.postParams" :isLastShowMinus=true>
-                          <template slot-scope="props">
-                            <vipmro-cols>
-                              <vipmro-input v-model="props.item.key" width="220"></vipmro-input>
-                              <vipmro-input v-model="props.item.value" width="220"></vipmro-input>
-                            </vipmro-cols>
-                          </template>
-                        </vipmro-add-html>
-                      </div>
+                    <vipmro-form-item type="describe" title="项目描述">
+                      <vipmro-textarea v-model="detailForm.describe"
+                                       :top="2"
+                                       width="500"
+                                       :rows=10
+                                       :changeBackground="true"
+                                       :readonly="!saveBtnShow"></vipmro-textarea>
                     </vipmro-form-item>
                   </vipmro-cols>
-                </div>
+                  <vipmro-cols>
+                    <vipmro-form-item type="needSynBack" title="同步返回">
+                      <vipmro-radio
+                        :top="0"
+                        :options="radios.needSynBack.radioOptions"
+                        v-model="detailForm.needSynBack"
+                        @change="callBackChange"
+                      ></vipmro-radio>
+                    </vipmro-form-item>
+                  </vipmro-cols>
+                  <div v-show="callBackShow">
+                    <vipmro-cols>
+                      <vipmro-form-item type="url" title="回调地址">
+                        <vipmro-input v-model="detailForm.callBack.address"
+                                      :top="2"
+                                      width="220"
+                                      :changeBackground="true"
+                                      :readonly="!saveBtnShow"></vipmro-input>
+                      </vipmro-form-item>
+                    </vipmro-cols>
+                    <vipmro-cols>
+                      <vipmro-form-item title="自定义参数">
+                        <div class="vipmro-add-html">
+                          <vipmro-add-html v-model="detailForm.callBack.postParams" :isLastShowMinus=true>
+                            <template slot-scope="props">
+                              <vipmro-cols>
+                                <vipmro-input v-model="props.item.key" width="220"></vipmro-input>
+                                <vipmro-input v-model="props.item.value" width="220"></vipmro-input>
+                              </vipmro-cols>
+                            </template>
+                          </vipmro-add-html>
+                        </div>
+                      </vipmro-form-item>
+                    </vipmro-cols>
+                  </div>
 
-                <vipmro-cols>
-                  <vipmro-form-item type="obtainDataType" title="数据获取模式">
-                    <vipmro-radio
-                      :top="0"
-                      :options="radios.obtainDataType.radioOptions"
-                      v-model="detailForm.obtainDataType"
-                      @change="obtainDataTypeChange"
-                    ></vipmro-radio>
+                  <vipmro-cols>
+                    <vipmro-form-item type="obtainDataType" title="数据获取模式">
+                      <vipmro-radio
+                        :top="0"
+                        :options="radios.obtainDataType.radioOptions"
+                        v-model="detailForm.obtainDataType"
+                        @change="obtainDataTypeChange"
+                      ></vipmro-radio>
+                    </vipmro-form-item>
+                  </vipmro-cols>
+                  <div>
+                    <vipmro-cols>
+                      <vipmro-form-item type="taskFrequency.cronExpression" title="频率" v-show="obtainShow">
+                        <vipmro-input v-model="detailForm.taskFrequency.cronExpression"
+                                      :top="2"
+                                      width="220"
+                                      :changeBackground="true"
+                                      :readonly="!saveBtnShow"></vipmro-input>
+                      </vipmro-form-item>
+                    </vipmro-cols>
+                    <vipmro-cols>
+                      <vipmro-form-item type="taskFrequency.inputProtocol" title="协议"  v-show="obtainShow">
+                        <div class="webui-select">
+                          <vipmro-select
+                            :options="select.connectIn.selectOptions"
+                            v-model="detailForm.inputProtocol.type"
+                            :width="220"
+                            :readonly="!saveBtnShow"
+                            @change="connectInDataChange"
+                          ></vipmro-select>
+                        </div>
+                      </vipmro-form-item>
+                    </vipmro-cols>
+                    <div v-show="obtainShow">
+                      <template name="http">
+                        <vipmro-cols>
+                          <vipmro-form-item title="url" v-show="connectInShow[0].show">
+                            <vipmro-input v-model="connectIn.http.url"
+                                          :top="2"
+                                          width="220"
+                                          :changeBackground="true"
+                                          :readonly="!saveBtnShow"></vipmro-input>
+                          </vipmro-form-item>
+                        </vipmro-cols>
+                        <vipmro-cols>
+                          <vipmro-form-item title="heads" v-show="connectInShow[0].show">
+                            <div class="vipmro-add-html">
+                              <vipmro-add-html v-model="connectIn.http.heads" :isLastShowMinus=true>
+                                <template slot-scope="props">
+                                  <vipmro-cols>
+                                    <vipmro-input v-model="props.item.key" width="220"></vipmro-input>
+                                    <vipmro-input v-model="props.item.value" width="220"></vipmro-input>
+                                  </vipmro-cols>
+                                </template>
+                              </vipmro-add-html>
+                            </div>
+                          </vipmro-form-item>
+                        </vipmro-cols>
+
+                        <vipmro-cols>
+                          <vipmro-form-item title="params" v-show="connectInShow[0].show">
+                            <div class="vipmro-add-html">
+                              <vipmro-add-html v-model="connectIn.http.params" :isLastShowMinus=true>
+                                <template slot-scope="props">
+                                  <vipmro-cols>
+                                    <vipmro-input v-model="props.item.key" width="220"></vipmro-input>
+                                    <vipmro-input v-model="props.item.value" width="220"></vipmro-input>
+                                  </vipmro-cols>
+                                </template>
+                              </vipmro-add-html>
+                            </div>
+                          </vipmro-form-item>
+                        </vipmro-cols>
+                      </template>
+                      <template name="https">
+                        <vipmro-cols>
+                          <vipmro-form-item title="url" v-show="connectInShow[1].show">
+                            <vipmro-input v-model="connectIn.https.url"
+                                          :top="2"
+                                          width="220"
+                                          :changeBackground="true"
+                                          :readonly="!saveBtnShow"></vipmro-input>
+                          </vipmro-form-item>
+                        </vipmro-cols>
+                        <vipmro-cols>
+                          <vipmro-form-item title="heads" v-show="connectInShow[1].show">
+                            <div class="vipmro-add-html">
+                              <vipmro-add-html v-model="connectIn.https.heads">
+                                <template slot-scope="props">
+                                  <vipmro-cols>
+                                    <vipmro-input v-model="props.item.key" width="220"></vipmro-input>
+                                    <vipmro-input v-model="props.item.value" width="220"></vipmro-input>
+                                  </vipmro-cols>
+                                </template>
+                              </vipmro-add-html>
+                            </div>
+                          </vipmro-form-item>
+                        </vipmro-cols>
+
+                        <vipmro-cols>
+                          <vipmro-form-item title="params" v-show="connectInShow[1].show">
+                            <div class="vipmro-add-html">
+                              <vipmro-add-html v-model="connectIn.https.params">
+                                <template slot-scope="props">
+                                  <vipmro-cols>
+                                    <vipmro-input v-model="props.item.key" width="220"></vipmro-input>
+                                    <vipmro-input v-model="props.item.value" width="220"></vipmro-input>
+                                  </vipmro-cols>
+                                </template>
+                              </vipmro-add-html>
+                            </div>
+                          </vipmro-form-item>
+                        </vipmro-cols>
+                      </template>
+                      <template name="ftp">
+                        <vipmro-cols>
+                          <vipmro-form-item title="url" v-show="connectInShow[2].show">
+                            <vipmro-input v-model="connectIn.ftp.url"
+                                          :top="2"
+                                          width="220"
+                                          :changeBackground="true"
+                                          :readonly="!saveBtnShow"></vipmro-input>
+                          </vipmro-form-item>
+                        </vipmro-cols>
+                        <vipmro-cols>
+                          <vipmro-form-item title="port" v-show="connectInShow[2].show">
+                            <vipmro-input v-model="connectIn.ftp.port"
+                                          :top="2"
+                                          width="220"
+                                          :changeBackground="true"
+                                          :readonly="!saveBtnShow"></vipmro-input>
+                          </vipmro-form-item>
+                        </vipmro-cols>
+                        <vipmro-cols>
+                          <vipmro-form-item title="filePath" v-show="connectInShow[2].show">
+                            <vipmro-input v-model="connectIn.ftp.filePath"
+                                          :top="2"
+                                          width="220"
+                                          :changeBackground="true"
+                                          :readonly="!saveBtnShow"></vipmro-input>
+                          </vipmro-form-item>
+                        </vipmro-cols>
+                        <vipmro-cols>
+                          <vipmro-form-item title="fileName" v-show="connectInShow[2].show">
+                            <vipmro-input v-model="connectIn.ftp.fileName"
+                                          :top="2"
+                                          width="220"
+                                          :changeBackground="true"
+                                          :readonly="!saveBtnShow"></vipmro-input>
+                          </vipmro-form-item>
+                        </vipmro-cols>
+                        <vipmro-cols>
+                          <vipmro-form-item title="account" v-show="connectInShow[2].show">
+                            <vipmro-input v-model="connectIn.ftp.account"
+                                          :top="2"
+                                          width="220"
+                                          :changeBackground="true"
+                                          :readonly="!saveBtnShow"></vipmro-input>
+                          </vipmro-form-item>
+                        </vipmro-cols>
+                        <vipmro-cols>
+                          <vipmro-form-item title="password" v-show="connectInShow[2].show">
+                            <vipmro-input v-model="connectIn.ftp.password"
+                                          :top="2"
+                                          width="220"
+                                          :changeBackground="true"
+                                          :readonly="!saveBtnShow"></vipmro-input>
+                          </vipmro-form-item>
+                        </vipmro-cols>
+                      </template>
+                      <template name="sftp">
+                        <vipmro-cols>
+                          <vipmro-form-item title="url" v-show="connectInShow[3].show">
+                            <vipmro-input v-model="connectIn.sftp.url"
+                                          :top="2"
+                                          width="220"
+                                          :changeBackground="true"
+                                          :readonly="!saveBtnShow"></vipmro-input>
+                          </vipmro-form-item>
+                        </vipmro-cols>
+                        <vipmro-cols>
+                          <vipmro-form-item title="port" v-show="connectInShow[3].show">
+                            <vipmro-input v-model="connectIn.sftp.port"
+                                          :top="2"
+                                          width="220"
+                                          :changeBackground="true"
+                                          :readonly="!saveBtnShow"></vipmro-input>
+                          </vipmro-form-item>
+                        </vipmro-cols>
+                        <vipmro-cols>
+                          <vipmro-form-item title="filePath" v-show="connectInShow[3].show">
+                            <vipmro-input v-model="connectIn.sftp.filePath"
+                                          :top="2"
+                                          width="220"
+                                          :changeBackground="true"
+                                          :readonly="!saveBtnShow"></vipmro-input>
+                          </vipmro-form-item>
+                        </vipmro-cols>
+                        <vipmro-cols>
+                          <vipmro-form-item title="fileName" v-show="connectInShow[3].show">
+                            <vipmro-input v-model="connectIn.sftp.fileName"
+                                          :top="2"
+                                          width="220"
+                                          :changeBackground="true"
+                                          :readonly="!saveBtnShow"></vipmro-input>
+                          </vipmro-form-item>
+                        </vipmro-cols>
+                        <vipmro-cols>
+                          <vipmro-form-item title="account" v-show="connectInShow[3].show">
+                            <vipmro-input v-model="connectIn.sftp.account"
+                                          :top="2"
+                                          width="220"
+                                          :changeBackground="true"
+                                          :readonly="!saveBtnShow"></vipmro-input>
+                          </vipmro-form-item>
+                        </vipmro-cols>
+                        <vipmro-cols>
+                          <vipmro-form-item title="password" v-show="connectInShow[3].show">
+                            <vipmro-input v-model="connectIn.sftp.password"
+                                          :top="2"
+                                          width="220"
+                                          :changeBackground="true"
+                                          :readonly="!saveBtnShow"></vipmro-input>
+                          </vipmro-form-item>
+                        </vipmro-cols>
+                      </template>
+                    </div>
+                  </div>
+
+                </vipmro-form-validator>
+              </vipmro-layout-main>
+            </template>
+
+            <template slot="inPutConnect">
+
+            </template>
+
+            <template slot="inPutData">
+              <vipmro-layout-top v-model="ruleEditHeight.top">
+                <vipmro-operation-button>
+                  <vipmro-button :title="'保存'" @click="saveInputData" :disabled="!saveBtnShow"></vipmro-button>
+                </vipmro-operation-button>
+              </vipmro-layout-top>
+              <vipmro-layout-main>
+                <vipmro-form-validator :value="detailForm">
+                  <vipmro-form-item title="数据类型">
+                    <vipmro-select
+                      :options="select.dataType.selectOptions"
+                      v-model="inPutDataTree.dataFormat.type"
+                      :width="220"
+                    ></vipmro-select>
                   </vipmro-form-item>
-                </vipmro-cols>
+                  <div class="webui-button" style="margin-left: 68px">
+                    <vipmro-layout-left :width="'500px'" style="border: 1px solid #d8dce5;height: 600px;overflow: scroll;">
+                      <VipmroJsonEditor
+                        :widt="'100%'"
+                        :props="inputTree.props"
+                        :options="this.inPutDataTree.dataNodeList"
+                        :forbitDrag="inputTree.forbitDrag"
+                        :forbitDrop="inputTree.forbitDrop"
+                        :defaultExpandedKeys="inputTree.defaultExpandedKeys"
+                        @dragEnd="input_handleDragEnd"
+                        @nodeClick="input_handleNodeClick"
+                      ></VipmroJsonEditor>
+                    </vipmro-layout-left>
+                    <vipmro-layout-left style="border: 1px solid #d8dce5; margin-left: 150px" :width="'500px'">
+                      <vipmro-cols>
+                        <vipmro-form-item type="outputParamName" title="参数名称">
+                          <vipmro-input v-model="chooseNode.input.name" :top="2" width="220"
+                                        :readonly="!saveBtnShow"></vipmro-input>
+                        </vipmro-form-item>
+                      </vipmro-cols>
+                      <vipmro-cols>
+                        <vipmro-form-item type="outputParamType" title="参数类型">
+                          <vipmro-select
+                            :options="select.nodeType.selectOptions"
+                            v-model="chooseNode.input.dataType"
+                            :width="220"
+                          ></vipmro-select>
+                        </vipmro-form-item>
+                      </vipmro-cols>
+                    </vipmro-layout-left>
+                  </div>
+
+
+                </vipmro-form-validator>
+              </vipmro-layout-main>
+            </template>
+
+            <template slot="outPutData">
+              <vipmro-layout-top v-model="ruleEditHeight.top">
+                <vipmro-operation-button>
+                  <vipmro-button :title="'保存'" @click="saveOutputData" :disabled="!saveBtnShow"></vipmro-button>
+                </vipmro-operation-button>
+              </vipmro-layout-top>
+              <vipmro-layout-main>
+                <vipmro-form-validator :value="detailForm">
+                  <vipmro-form-item title="数据类型">
+                    <vipmro-select
+                      :options="select.dataType.selectOptions"
+                      v-model="outPutDataTree.dataFormat.type"
+                      :width="220"
+                    ></vipmro-select>
+                  </vipmro-form-item>
+                  <div class="webui-button" style="margin-left: 68px">
+                    <vipmro-layout-left :width="'500px'" style="border: 1px solid #d8dce5;height: 600px;overflow: scroll;">
+                      <VipmroJsonEditor
+                        :widt="'100%'"
+                        :props="outputTree.props"
+                        :options="this.outPutDataTree.dataNodeList"
+                        :forbitDrag="outputTree.forbitDrag"
+                        :forbitDrop="outputTree.forbitDrop"
+                        :defaultExpandedKeys="outputTree.defaultExpandedKeys"
+                        @dragEnd="output_handleDragEnd"
+                        @nodeClick="output_handleNodeClick"
+                      ></VipmroJsonEditor>
+                    </vipmro-layout-left>
+                    <vipmro-layout-left style="border: 1px solid #d8dce5; margin-left: 150px" :width="'500px'">
+                      <vipmro-cols>
+                        <vipmro-form-item type="paramName" title="参数名称">
+                          <vipmro-input v-model="chooseNode.output.name" :top="2" width="220"
+                                        :readonly="!saveBtnShow"></vipmro-input>
+                        </vipmro-form-item>
+                      </vipmro-cols>
+                      <vipmro-cols>
+                        <vipmro-form-item type="paramType" title="参数类型">
+                          <vipmro-select
+                            :options="select.nodeType.selectOptions"
+                            v-model="chooseNode.output.dataType"
+                            :width="220"
+                          ></vipmro-select>
+                        </vipmro-form-item>
+                      </vipmro-cols>
+                      <vipmro-cols>
+                        <vipmro-form-item type="paramFilteType" title="过滤类型">
+                          <vipmro-select
+                            :options="select.filterType.selectOptions"
+                            v-model="chooseNode.output.filterType"
+                            :width="220"
+                          ></vipmro-select>
+                        </vipmro-form-item>
+                      </vipmro-cols>
+                      <vipmro-cols>
+                        <vipmro-form-item type="paramName" title="默认值">
+                          <vipmro-input v-model="chooseNode.output.defaultValue" :top="2" width="220"
+                                        :readonly="!saveBtnShow"></vipmro-input>
+                        </vipmro-form-item>
+                      </vipmro-cols>
+                    </vipmro-layout-left>
+                  </div>
+                </vipmro-form-validator>
+              </vipmro-layout-main>
+            </template>
+
+            <template slot="outPutConnect">
+              <vipmro-layout-top v-model="ruleEditHeight.top">
+                <vipmro-operation-button>
+                  <vipmro-button :title="'保存'" @click="saveOutputConnect" :disabled="!saveBtnShow"></vipmro-button>
+                </vipmro-operation-button>
+              </vipmro-layout-top>
+              <vipmro-layout-main>
+                <vipmro-form-validator>
                 <div>
                   <vipmro-cols>
-                    <vipmro-form-item type="taskFrequency.cronExpression" title="频率" v-show="obtainShow">
-                      <vipmro-input v-model="detailForm.taskFrequency.cronExpression"
-                                    :top="2"
-                                    width="220"
-                                    :changeBackground="true"
-                                    :readonly="!saveBtnShow"></vipmro-input>
-                    </vipmro-form-item>
-                  </vipmro-cols>
-                  <vipmro-cols>
-                    <vipmro-form-item type="taskFrequency.inputProtocol" title="协议"  v-show="obtainShow">
+                    <vipmro-form-item title="协议">
                       <div class="webui-select">
                         <vipmro-select
-                          :options="select.connectIn.selectOptions"
-                          v-model="detailForm.inputProtocol.type"
+                          :options="select.connectOut.selectOptions"
+                          v-model="detailForm.outputProtocol.type"
                           :width="220"
                           :readonly="!saveBtnShow"
-                          @change="connectDataChange"
+                          @change="connectOutDataChange"
                         ></vipmro-select>
+
                       </div>
                     </vipmro-form-item>
                   </vipmro-cols>
-                  <div v-show="obtainShow">
+
+                  <div>
                     <template name="http">
                       <vipmro-cols>
-                        <vipmro-form-item title="url" v-show="connectShow[0].show">
-                          <vipmro-input v-model="connect.http.url"
+                        <vipmro-form-item title="url" v-show="connectOutShow[0].show">
+                          <vipmro-input v-model="connectOut.http.url"
                                         :top="2"
                                         width="220"
                                         :changeBackground="true"
@@ -134,9 +498,9 @@
                         </vipmro-form-item>
                       </vipmro-cols>
                       <vipmro-cols>
-                        <vipmro-form-item title="heads" v-show="connectShow[0].show">
+                        <vipmro-form-item title="heads" v-show="connectOutShow[0].show">
                           <div class="vipmro-add-html">
-                            <vipmro-add-html v-model="connect.http.heads" :isLastShowMinus=true>
+                            <vipmro-add-html v-model="connectOut.http.heads" :isLastShowMinus=true>
                               <template slot-scope="props">
                                 <vipmro-cols>
                                   <vipmro-input v-model="props.item.key" width="220"></vipmro-input>
@@ -147,11 +511,10 @@
                           </div>
                         </vipmro-form-item>
                       </vipmro-cols>
-
                       <vipmro-cols>
-                        <vipmro-form-item title="params" v-show="connectShow[0].show">
+                        <vipmro-form-item title="params" v-show="connectOutShow[0].show">
                           <div class="vipmro-add-html">
-                            <vipmro-add-html v-model="connect.http.params" :isLastShowMinus=true>
+                            <vipmro-add-html v-model="connectOut.http.params" :isLastShowMinus=true>
                               <template slot-scope="props">
                                 <vipmro-cols>
                                   <vipmro-input v-model="props.item.key" width="220"></vipmro-input>
@@ -165,8 +528,8 @@
                     </template>
                     <template name="https">
                       <vipmro-cols>
-                        <vipmro-form-item title="url" v-show="connectShow[1].show">
-                          <vipmro-input v-model="connect.https.url"
+                        <vipmro-form-item title="url" v-show="connectOutShow[1].show">
+                          <vipmro-input v-model="connectOut.https.url"
                                         :top="2"
                                         width="220"
                                         :changeBackground="true"
@@ -174,9 +537,9 @@
                         </vipmro-form-item>
                       </vipmro-cols>
                       <vipmro-cols>
-                        <vipmro-form-item title="heads" v-show="connectShow[1].show">
+                        <vipmro-form-item title="heads" v-show="connectOutShow[1].show">
                           <div class="vipmro-add-html">
-                            <vipmro-add-html v-model="connect.https.heads">
+                            <vipmro-add-html v-model="connectOut.https.heads">
                               <template slot-scope="props">
                                 <vipmro-cols>
                                   <vipmro-input v-model="props.item.key" width="220"></vipmro-input>
@@ -187,11 +550,10 @@
                           </div>
                         </vipmro-form-item>
                       </vipmro-cols>
-
                       <vipmro-cols>
-                        <vipmro-form-item title="params" v-show="connectShow[1].show">
+                        <vipmro-form-item title="params" v-show="connectInShow[1].show">
                           <div class="vipmro-add-html">
-                            <vipmro-add-html v-model="connect.https.params">
+                            <vipmro-add-html v-model="connectOut.https.params">
                               <template slot-scope="props">
                                 <vipmro-cols>
                                   <vipmro-input v-model="props.item.key" width="220"></vipmro-input>
@@ -205,8 +567,8 @@
                     </template>
                     <template name="ftp">
                       <vipmro-cols>
-                        <vipmro-form-item title="url" v-show="connectShow[2].show">
-                          <vipmro-input v-model="connect.ftp.url"
+                        <vipmro-form-item title="url" v-show="connectOutShow[2].show">
+                          <vipmro-input v-model="connectOut.ftp.url"
                                         :top="2"
                                         width="220"
                                         :changeBackground="true"
@@ -214,8 +576,8 @@
                         </vipmro-form-item>
                       </vipmro-cols>
                       <vipmro-cols>
-                        <vipmro-form-item title="port" v-show="connectShow[2].show">
-                          <vipmro-input v-model="connect.ftp.port"
+                        <vipmro-form-item title="port" v-show="connectOutShow[2].show">
+                          <vipmro-input v-model="connectOut.ftp.port"
                                         :top="2"
                                         width="220"
                                         :changeBackground="true"
@@ -223,8 +585,8 @@
                         </vipmro-form-item>
                       </vipmro-cols>
                       <vipmro-cols>
-                        <vipmro-form-item title="filePath" v-show="connectShow[2].show">
-                          <vipmro-input v-model="connect.ftp.filePath"
+                        <vipmro-form-item title="filePath" v-show="connectOutShow[2].show">
+                          <vipmro-input v-model="connectOut.ftp.filePath"
                                         :top="2"
                                         width="220"
                                         :changeBackground="true"
@@ -232,8 +594,8 @@
                         </vipmro-form-item>
                       </vipmro-cols>
                       <vipmro-cols>
-                        <vipmro-form-item title="fileName" v-show="connectShow[2].show">
-                          <vipmro-input v-model="connect.ftp.fileName"
+                        <vipmro-form-item title="fileName" v-show="connectOutShow[2].show">
+                          <vipmro-input v-model="connectOut.ftp.fileName"
                                         :top="2"
                                         width="220"
                                         :changeBackground="true"
@@ -241,8 +603,8 @@
                         </vipmro-form-item>
                       </vipmro-cols>
                       <vipmro-cols>
-                        <vipmro-form-item title="account" v-show="connectShow[2].show">
-                          <vipmro-input v-model="connect.ftp.account"
+                        <vipmro-form-item title="account" v-show="connectOutShow[2].show">
+                          <vipmro-input v-model="connectOut.ftp.account"
                                         :top="2"
                                         width="220"
                                         :changeBackground="true"
@@ -250,8 +612,8 @@
                         </vipmro-form-item>
                       </vipmro-cols>
                       <vipmro-cols>
-                        <vipmro-form-item title="password" v-show="connectShow[2].show">
-                          <vipmro-input v-model="connect.ftp.password"
+                        <vipmro-form-item title="password" v-show="connectOutShow[2].show">
+                          <vipmro-input v-model="connectOut.ftp.password"
                                         :top="2"
                                         width="220"
                                         :changeBackground="true"
@@ -261,8 +623,8 @@
                     </template>
                     <template name="sftp">
                       <vipmro-cols>
-                        <vipmro-form-item title="url" v-show="connectShow[3].show">
-                          <vipmro-input v-model="connect.sftp.url"
+                        <vipmro-form-item title="url" v-show="connectOutShow[3].show">
+                          <vipmro-input v-model="connectOut.sftp.url"
                                         :top="2"
                                         width="220"
                                         :changeBackground="true"
@@ -270,8 +632,8 @@
                         </vipmro-form-item>
                       </vipmro-cols>
                       <vipmro-cols>
-                        <vipmro-form-item title="port" v-show="connectShow[3].show">
-                          <vipmro-input v-model="connect.sftp.port"
+                        <vipmro-form-item title="port" v-show="connectOutShow[3].show">
+                          <vipmro-input v-model="connectOut.sftp.port"
                                         :top="2"
                                         width="220"
                                         :changeBackground="true"
@@ -279,8 +641,8 @@
                         </vipmro-form-item>
                       </vipmro-cols>
                       <vipmro-cols>
-                        <vipmro-form-item title="filePath" v-show="connectShow[3].show">
-                          <vipmro-input v-model="connect.sftp.filePath"
+                        <vipmro-form-item title="filePath" v-show="connectOutShow[3].show">
+                          <vipmro-input v-model="connectOut.sftp.filePath"
                                         :top="2"
                                         width="220"
                                         :changeBackground="true"
@@ -288,8 +650,8 @@
                         </vipmro-form-item>
                       </vipmro-cols>
                       <vipmro-cols>
-                        <vipmro-form-item title="fileName" v-show="connectShow[3].show">
-                          <vipmro-input v-model="connect.sftp.fileName"
+                        <vipmro-form-item title="fileName" v-show="connectOutShow[3].show">
+                          <vipmro-input v-model="connectOut.sftp.fileName"
                                         :top="2"
                                         width="220"
                                         :changeBackground="true"
@@ -297,8 +659,8 @@
                         </vipmro-form-item>
                       </vipmro-cols>
                       <vipmro-cols>
-                        <vipmro-form-item title="account" v-show="connectShow[3].show">
-                          <vipmro-input v-model="connect.sftp.account"
+                        <vipmro-form-item title="account" v-show="connectOutShow[3].show">
+                          <vipmro-input v-model="connectOut.sftp.account"
                                         :top="2"
                                         width="220"
                                         :changeBackground="true"
@@ -306,8 +668,8 @@
                         </vipmro-form-item>
                       </vipmro-cols>
                       <vipmro-cols>
-                        <vipmro-form-item title="password" v-show="connectShow[3].show">
-                          <vipmro-input v-model="connect.sftp.password"
+                        <vipmro-form-item title="password" v-show="connectOutShow[3].show">
+                          <vipmro-input v-model="connectOut.sftp.password"
                                         :top="2"
                                         width="220"
                                         :changeBackground="true"
@@ -316,69 +678,20 @@
                       </vipmro-cols>
                     </template>
                   </div>
+
                 </div>
-
-
-
-              </vipmro-form-validator>
-            </template>
-
-            <template slot="inPutData">
-              <vipmro-form-validator :value="detailForm">
-                <vipmro-form-item title="数据类型">
-                  <vipmro-select
-                    :options="select.dataType.selectOptions"
-                    v-model="inPutDataTree.dataFormat.type"
-                    :width="220"
-                  ></vipmro-select>
-                </vipmro-form-item>
-                <div class="webui-button" style="margin-left: 45px">
-                  <vipmro-layout-left :width="'500px'" style="border: 1px solid;">
-                      <VipmroJsonEditor
-                        :props="inputTree.props"
-                        :options="this.inPutDataTree.dataNodeList"
-                        :forbitDrag="inputTree.forbitDrag"
-                        :forbitDrop="inputTree.forbitDrop"
-                        :defaultExpandedKeys="inputTree.defaultExpandedKeys"
-                        @dragEnd="handleDragEnd"
-                        @nodeClick="handleNodeClick"
-                      ></VipmroJsonEditor>
-                  </vipmro-layout-left>
-                  <vipmro-layout-left style="border: 1px solid;" :width="'500px'">
-                      <vipmro-cols>
-                        <vipmro-form-item type="name" title="参数名称">
-                          <vipmro-input v-model="chooseNode.name" :top="2" width="220"
-                                        :readonly="!saveBtnShow"></vipmro-input>
-                        </vipmro-form-item>
-                      </vipmro-cols>
-                      <vipmro-cols>
-                        <vipmro-form-item type="name" title="参数类型">
-                          <vipmro-select
-                            :options="select.nodeType.selectOptions"
-                            v-model="chooseNode.dataType"
-                            :width="220"
-                          ></vipmro-select>
-                        </vipmro-form-item>
-                      </vipmro-cols>
-                  </vipmro-layout-left>
-                </div>
-
-
-              </vipmro-form-validator>
-            </template>
-
-            <template slot="outPutData">
-
+                </vipmro-form-validator>
+              </vipmro-layout-main>
             </template>
 
             <template slot="rule">
-              <vipmro-tab :position="ruleTable.position" :list="ruleTable.list" v-model="ruleTable.position">
+              <vipmro-tab :position="ruleTable.position":list="ruleTable.list" v-model="ruleTable.position">
                 <template slot="list">
                 <div class="">
                   <vipmro-layout-top>
                     <vipmro-operation-button>
                       <vipmro-button v-for="item in ruleButton" :title="item.name" @click="buttonMethod(item.method)"
-                                     :disabled="item.dfisabled" :key="item.name"></vipmro-button>
+                                     :disabled="!saveBtnShow" :key="item.name"></vipmro-button>
                     </vipmro-operation-button>
                   </vipmro-layout-top>
                   <vipmro-layout-main>
@@ -391,12 +704,16 @@
                 </div>
               </template>
                 <template slot="detail">
-                  <vipmro-layout-main :height="ruleTable.editHeight">
+                  <vipmro-layout-top v-model="ruleEditHeight.top">
+                    <vipmro-operation-button>
+                      <vipmro-button :title="'保存'" @click="saveRule" :disabled="!rule.ruleSaveBtnShow"></vipmro-button>
+                    </vipmro-operation-button>
+                  </vipmro-layout-top>
+                  <vipmro-layout-main :height="ruleEditHeight">
                     <template slot-scope="props">
                       <vipmro-form-validator :value="rule.form" ref="validatorForm">
-
                         <VipmroCols :cols="12">
-                          <vipmro-form-item type="name" title="规则名称" :validator="vText(30)"
+                          <vipmro-form-item type="rule_name" title="规则名称" :validator="vText(30)"
                                             :validatorType="!rule.saveBtnShow">
                             <vipmro-input v-model="rule.form.name" :top="2" width="220"
                                           :readonly="!rule.ruleSaveBtnShow"></vipmro-input>
@@ -412,8 +729,7 @@
                             >
                               <template slot-scope="props">
                                 <VipmroCols :cols="24">
-                                  <vipmro-form-item type="name" title="字段名" :validator="vText(30)"
-                                                    :validatorType="!rule.ruleSaveBtnShow">
+                                  <vipmro-form-item type="param_name" title="字段名">
                                     <vipmro-input v-model="props.item.filedName" :top="2" width="220"
                                                   :readonly="!rule.ruleSaveBtnShow"></vipmro-input>
                                   </vipmro-form-item>
@@ -440,11 +756,11 @@
                             >
                               <template slot-scope="props">
                                 <VipmroCols :cols="24">
-                                  <vipmro-form-item type="name" title="字段名" :validator="vText(30)" :validatorType="!rule.saveBtnShow">
+                                  <vipmro-form-item type="target_name" title="字段名">
                                     <vipmro-input v-model="props.item.filedName" :top="2" width="220"
                                                   :readonly="!rule.ruleSaveBtnShow"></vipmro-input>
                                   </vipmro-form-item>
-                                  <vipmro-form-item type="name" title="值" :validator="vText(30)" :validatorType="!rule.saveBtnShow">
+                                  <vipmro-form-item type="target_value" title="值">
                                     <vipmro-input v-model="props.item.value" :top="2" width="220"
                                                   :readonly="!rule.ruleSaveBtnShow"></vipmro-input>
                                   </vipmro-form-item>
@@ -458,7 +774,22 @@
                   </vipmro-layout-main>
                 </template>
               </vipmro-tab>
+              <vipmro-dialog
+                v-model="ruleImportTable.dialogShow"
+                title="导入规则"
+                width="1000px"
+                :beforeConfirm="saveImportRule"
+              >
+                <vipmro-table
+                  :colHeaders="ruleImportTable.colHeaders"
+                  :columns="ruleImportTable.columns"
+                  :data="ruleImportTable.data"
+                  width="1000px"
+                ></vipmro-table>
+                <vipmro-paging :page="ruleImportTable.currentPage" :pageSize="ruleImportTable.pageSize" :total="ruleImportTable.total"
+                               @getList="search"></vipmro-paging>
 
+              </vipmro-dialog>
             </template>
           </vipmro-tab>
 
@@ -479,7 +810,6 @@
                    @confirm="startProject" width="400px" :content="DIALOG_CONTENT">
       {{startDialog.text}}
     </vipmro-dialog>
-
     <vipmro-dialog :iconType="deleteRuleDialog.iconType" :title="deleteRuleDialog.title" v-model="deleteRuleDialog.dialogVisible"
                    @confirm="deleteRule" width="400px" :content="DIALOG_CONTENT">
       {{deleteRuleDialog.text}}
@@ -488,10 +818,11 @@
 </template>
 
 <script type="text/javascript">
-  import {API_PROJECT, API_DATA_TREE_INPUT, API_DATA_RULE} from '../common/apiConstant';
+  import {API_PROJECT, API_DATA_TREE_INPUT, API_DATA_RULE, API_DATA_TREE_OUTPUT} from '../common/apiConstant';
   import {button, editHeight, table, dict} from './data';
   import {vText, vNumber} from '../common/validator';
-  import {detail, radios, select, connect, inputTree, ruleTable, ruleButton, ruleEditHeight, ruleDetailForm} from './detailData';
+  import {detail, radios, select, connectIn, connectOut, inputTree, outputTree, ruleTable, ruleButton,
+    ruleEditHeight, ruleDetailForm, ruleImportTable} from './detailData';
 
   export default {
     data() {
@@ -504,16 +835,29 @@
         ruleButton,
         ruleEditHeight,
         ruleDetailForm,
+        ruleImportTable,
         radios,
         select,
-        connect,
+        detail,
+        connectIn,
+        connectOut,
         inputTree,
+        outputTree,
         chooseNode: {
-          name: null,
-          id: null,
-          dataType: null
+          input: {
+            name: null,
+            id: null,
+            dataType: null
+          },
+          output: {
+            name: null,
+            id: null,
+            dataType: null,
+            filterType: null,
+            defaultValue: ''
+          }
         },
-        connectShow: [{
+        connectInShow: [{
             value: 1,
             name: 'http',
             show: false
@@ -530,6 +874,23 @@
             name: 'sftp',
             show: false
         }],
+        connectOutShow: [{
+          value: 1,
+          name: 'http',
+          show: false
+        }, {
+          value: 2,
+          name: 'http',
+          show: false
+        }, {
+          value: 3,
+          name: 'ftp',
+          show: false
+        }, {
+          value: 4,
+          name: 'sftp',
+          show: false
+        }],
         callBackShow: false,
         obtainShow: false,
         typeValidator: {
@@ -539,7 +900,7 @@
         },
         rule: {
           ruleSaveBtnShow: false,
-          from: null
+          form: JSON.parse(JSON.stringify(ruleDetailForm))
         },
         saveBtnShow: false,
         detailDialog: {
@@ -593,7 +954,8 @@
             }
             this.detailForm = res.data;
             this.obtainDataTypeChange(this.detailForm.obtainDataType);
-            this.buildConnectData(this.detailForm.inputProtocol);
+            this.buildConnectInData(this.detailForm.inputProtocol);
+            this.buildConnectOutData(this.detailForm.outputProtocol);
             this.buildCallbackData(res.data);
             table.position = 'detail';
             this.detailTabPosition = 'baseInfo';
@@ -611,7 +973,7 @@
       dblClickRow_rule(obj) {
         this.rule.form = obj;
         ruleTable.position = 'detail';
-        this.rule.saveBtnShow = true;
+        this.rule.ruleSaveBtnShow = true;
       },
       buttonMethod(method) {
         this[method]();
@@ -782,6 +1144,11 @@
           }
         });
       },
+      add() {
+        table.position = 'detail';
+        this.saveBtnShow = true;
+        this.detailForm = JSON.parse(JSON.stringify(detail.detailForm));
+      },
       addRule() {
         this.ruleTable.position = 'detail';
         this.rule.ruleSaveBtnShow = true;
@@ -821,6 +1188,57 @@
           }
         });
       },
+      saveProject() {
+      },
+      saveInputData() {
+      },
+      saveOutputData() {
+      },
+      saveOutputConnect() {
+
+      },
+      saveImportRule() {
+        let ids = '';
+        ruleImportTable.data.forEach(item => {
+          if (item.checked) {
+            ids = ids + item.id + ',';
+          }
+        });
+        if (ids === '') {
+          this.$message({type: 'error', message: '请至少选择一条数据', showClose: true});
+          return;
+        };
+        let model = {
+          idArr: ids.split(','),
+          projectId: this.detailForm.id
+        };
+        this.load(JSON.stringify(model), API_DATA_RULE.import, 'post').then((res) => {
+          if (res.errCode === 0) {
+            this.$message({type: 'success', message: res.msg, showClose: true});
+            this.loadDataRule();
+          } else {
+            this.$message({type: 'error', message: res.msg, showClose: true});
+          }
+        });
+      },
+      saveRule() {
+        let apiAddress = null;
+        if (this.rule.form.id != null) {
+          apiAddress = API_DATA_RULE.update;
+        } else {
+          apiAddress = API_DATA_RULE.add;
+        }
+        this.rule.form.projectId = this.detailForm.id;
+        this.load(JSON.stringify(this.rule.form), apiAddress, 'post').then((res) => {
+          if (res.errCode === 0) {
+            this.$message({type: 'success', message: res.msg, showClose: true});
+            this.loadDataRule();
+            ruleTable.position = 'list';
+          } else {
+            this.$message({type: 'error', message: res.msg, showClose: true});
+          }
+        });
+      },
       callBackChange(obj) {
         if (obj === 1) {
             this.callBackShow = true;
@@ -835,13 +1253,22 @@
             this.obtainShow = false;
           }
       },
-      connectDataChange(obj) {
-        this.connectShow.forEach((item) => {
+      connectInDataChange(obj) {
+        this.connectInShow.forEach((item) => {
             if (item.value === obj) {
               item.show = true;
             } else {
               item.show = false;
             }
+        });
+      },
+      connectOutDataChange(obj) {
+        this.connectOutShow.forEach((item) => {
+          if (item.value === obj) {
+            item.show = true;
+          } else {
+            item.show = false;
+          }
         });
       },
       buildCallbackData(obj) {
@@ -858,16 +1285,15 @@
         }
         this.detailForm.callBack.postParams = paramsArr;
       },
-      buildConnectData(inputProtocol) {
-        if (inputProtocol === null) {
-            return;
+      buildConnectInData(protocol) {
+        if (protocol === null) {
+          return;
         }
         let paramsMap = new Map();
-        inputProtocol.connectParamsList.forEach((item) => {
+        protocol.connectParamsList.forEach((item) => {
           paramsMap.set(item.name, item.value);
         });
-
-        if (inputProtocol.type === 1) {
+        if (protocol.type === 1) {
           let headsArr = [];
           let paramsArr = [];
           let heads = paramsMap.get('heads');
@@ -878,10 +1304,10 @@
           for (let k of Object.keys(params)) {
             paramsArr.push(new KeyValue(k, params[k]));
           }
-          connect.http.url = paramsMap.get('url');
-          connect.http.heads = headsArr;
-          connect.http.params = paramsArr;
-        } else if (inputProtocol.type === 2) {
+          connectIn.http.url = paramsMap.get('url');
+          connectIn.http.heads = headsArr;
+          connectIn.http.params = paramsArr;
+        } else if (protocol.type === 2) {
           let headsArr = [];
           let paramsArr = [];
           let heads = paramsMap.get('heads');
@@ -893,25 +1319,81 @@
           for (let k of Object.keys(params)) {
             paramsArr.push(new KeyValue(k, params[k]));
           }
-          connect.https.url = paramsMap.get('url');
-          connect.https.heads = headsArr;
-          connect.https.params = paramsArr;
-        } else if (inputProtocol.type === 3) {
-          connect.ftp.host = paramsMap.get('host');
-          connect.ftp.port = paramsMap.get('port');
-          connect.ftp.filePath = paramsMap.get('filePath');
-          connect.ftp.fileName = paramsMap.get('fileName');
-          connect.ftp.account = paramsMap.get('account');
-          connect.ftp.password = paramsMap.get('password');
-        } else if (inputProtocol.type === 4) {
-          connect.sftp.host = paramsMap.get('host');
-          connect.sftp.port = paramsMap.get('port');
-          connect.sftp.filePath = paramsMap.get('filePath');
-          connect.sftp.fileName = paramsMap.get('fileName');
-          connect.sftp.account = paramsMap.get('account');
-          connect.sftp.password = paramsMap.get('password');
+          connectIn.https.url = paramsMap.get('url');
+          connectIn.https.heads = headsArr;
+          connectIn.https.params = paramsArr;
+        } else if (protocol.type === 3) {
+          connectIn.ftp.host = paramsMap.get('host');
+          connectIn.ftp.port = paramsMap.get('port');
+          connectIn.ftp.filePath = paramsMap.get('filePath');
+          connectIn.ftp.fileName = paramsMap.get('fileName');
+          connectIn.ftp.account = paramsMap.get('account');
+          connectIn.ftp.password = paramsMap.get('password');
+        } else if (protocol.type === 4) {
+          connectIn.sftp.host = paramsMap.get('host');
+          connectIn.sftp.port = paramsMap.get('port');
+          connectIn.sftp.filePath = paramsMap.get('filePath');
+          connectIn.sftp.fileName = paramsMap.get('fileName');
+          connectIn.sftp.account = paramsMap.get('account');
+          connectIn.sftp.password = paramsMap.get('password');
         }
-        this.connectDataChange(inputProtocol.type);
+        this.connectInDataChange(protocol.type);
+      },
+      buildConnectOutData(protocol) {
+        if (protocol === null) {
+          return;
+        }
+        let paramsMap = new Map();
+        console.log(protocol);
+        protocol.connectParamsList.forEach((item) => {
+          paramsMap.set(item.name, item.value);
+        });
+        console.log(paramsMap);
+        if (protocol.type === 1) {
+          let headsArr = [];
+          let paramsArr = [];
+          let heads = paramsMap.get('heads');
+          let params = paramsMap.get('params');
+          for (let k of Object.keys(heads)) {
+            headsArr.push(new KeyValue(k, heads[k]));
+          }
+          for (let k of Object.keys(params)) {
+            paramsArr.push(new KeyValue(k, params[k]));
+          }
+          console.log(params);
+          connectOut.http.url = paramsMap.get('url');
+          connectOut.http.heads = headsArr;
+          connectOut.http.params = paramsArr;
+        } else if (protocol.type === 2) {
+          let headsArr = [];
+          let paramsArr = [];
+          let heads = paramsMap.get('heads');
+          let params = paramsMap.get('params');
+          for (let k of Object.keys(heads)) {
+            headsArr.push(new KeyValue(k, heads[k]));
+          }
+          for (let k of Object.keys(params)) {
+            paramsArr.push(new KeyValue(k, params[k]));
+          }
+          connectOut.https.url = paramsMap.get('url');
+          connectOut.https.heads = headsArr;
+          connectOut.https.params = paramsArr;
+        } else if (protocol.type === 3) {
+          connectOut.ftp.host = paramsMap.get('host');
+          connectOut.ftp.port = paramsMap.get('port');
+          connectOut.ftp.filePath = paramsMap.get('filePath');
+          connectOut.ftp.fileName = paramsMap.get('fileName');
+          connectOut.ftp.account = paramsMap.get('account');
+          connectOut.ftp.password = paramsMap.get('password');
+        } else if (protocol.type === 4) {
+          connectOut.sftp.host = paramsMap.get('host');
+          connectOut.sftp.port = paramsMap.get('port');
+          connectOut.sftp.filePath = paramsMap.get('filePath');
+          connectOut.sftp.fileName = paramsMap.get('fileName');
+          connectOut.sftp.account = paramsMap.get('account');
+          connectOut.sftp.password = paramsMap.get('password');
+        }
+        this.connectOutDataChange(protocol.type);
       },
       loadInputTree(id) {
         let model = {
@@ -920,7 +1402,6 @@
         this.load(JSON.stringify(model), API_DATA_TREE_INPUT.detail, 'post').then((res) => {
           if (res.errCode === 0) {
             this.inPutDataTree = res.data;
-            console.log(this.inPutDataTree);
           } else {
           }
         });
@@ -941,19 +1422,56 @@
         });
       },
       loadOutputTree(id) {
+        let model = {
+          projectId: id
+        };
+        this.load(JSON.stringify(model), API_DATA_TREE_OUTPUT.detail, 'post').then((res) => {
+          if (res.errCode === 0) {
+            this.outPutDataTree = res.data;
+          } else {
+          }
+        });
       },
       loadMapping(id) {
       },
-      handleDragEnd(draggingNode, dropNode, dropType, ev) {
-        console.log('tree drag end');
+      loadImportRule(currentPage, pageSize) {
+        if (currentPage) {
+          ruleImportTable.currentPage = currentPage;
+          ruleImportTable.pageSize = pageSize;
+        };
+        let model = {
+          keyword: ruleImportTable.keyword,
+          currentPage: ruleImportTable.currentPage,
+          pageSize: ruleImportTable.pageSize
+        };
+        this.load(JSON.stringify(model), API_DATA_RULE.list, 'post', true).then((res) => {
+          let code = res.errCode;
+          if (code === 0) {
+            ruleImportTable.data.splice(0, this.table.data.length);
+            res.data.data.forEach(item => {
+              ruleImportTable.data.push(item);
+            });
+            ruleImportTable.total = res.data.totalCount;
+          }
+        });
       },
-      handleNodeClick(data, node, component) {
-        console.log(node);
-        this.chooseNode = data;
+      importRule() {
+        ruleImportTable.dialogShow = true;
+      },
+      input_handleDragEnd(draggingNode, dropNode, dropType, ev) {
+      },
+      input_handleNodeClick(data, node, component) {
+        this.chooseNode.input = data;
+      },
+      output_handleDragEnd(draggingNode, dropNode, dropType, ev) {
+      },
+      output_handleNodeClick(data, node, component) {
+        this.chooseNode.output = data;
       }
     },
     created() {
       this.search();
+      this.loadImportRule();
     }
   };
   function KeyValue(key, value) {
