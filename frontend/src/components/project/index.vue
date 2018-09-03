@@ -342,7 +342,6 @@
             </template>
 
             <template slot="inPutConnect">
-
             </template>
 
             <template slot="inPutData">
@@ -365,7 +364,7 @@
                       <VipmroJsonEditor
                         :widt="'100%'"
                         :props="inputTree.props"
-                        :options="this.inPutDataTree.dataNodeList"
+                        :options="inPutDataTree.dataNodeList"
                         :forbitDrag="inputTree.forbitDrag"
                         :forbitDrop="inputTree.forbitDrop"
                         :defaultExpandedKeys="inputTree.defaultExpandedKeys"
@@ -460,6 +459,32 @@
                   </div>
                 </vipmro-form-validator>
               </vipmro-layout-main>
+            </template>
+
+            <template slot="mapping">
+              <vipmro-layout-top>
+                <vipmro-operation-button>
+                  <vipmro-button :title="'保存'" @click="saveMapping" :disabled="!saveBtnShow"></vipmro-button>
+                </vipmro-operation-button>
+              </vipmro-layout-top>
+              <vipmro-layout-left width="800px">
+                <vipmro-tabletree
+                  v-model="mappingTable.tableTreeValue"
+                  :tabletreeHeader="mappingTable.tableTreeHeader"
+                  @clickRow="selectInputMapping"
+                ></vipmro-tabletree>
+              </vipmro-layout-left>
+              <vipmro-layout-left>
+                <vipmro-cascader
+                  v-model="selectInputTable.selectTreeValue"
+                  :options="selectInputTable.selectTreeoptions"
+                  :props="selectInputTable.props"
+                  :changeOnSelect="true"
+                  :width="300"
+                  @change="changeInputSelectNode"
+                ></vipmro-cascader>
+              </vipmro-layout-left>
+
             </template>
 
             <template slot="outPutConnect">
@@ -818,11 +843,11 @@
 </template>
 
 <script type="text/javascript">
-  import {API_PROJECT, API_DATA_TREE_INPUT, API_DATA_RULE, API_DATA_TREE_OUTPUT} from '../common/apiConstant';
+  import {API_PROJECT, API_DATA_TREE_INPUT, API_DATA_RULE, API_DATA_TREE_OUTPUT, API_DATA_MAPPING, API_PROJECT_CONNECT_OUT} from '../common/apiConstant';
   import {button, editHeight, table, dict} from './data';
   import {vText, vNumber} from '../common/validator';
   import {detail, radios, select, connectIn, connectOut, inputTree, outputTree, ruleTable, ruleButton,
-    ruleEditHeight, ruleDetailForm, ruleImportTable} from './detailData';
+    ruleEditHeight, ruleDetailForm, ruleImportTable, mappingTable, selectInputTable} from './detailData';
 
   export default {
     data() {
@@ -836,6 +861,8 @@
         ruleEditHeight,
         ruleDetailForm,
         ruleImportTable,
+        mappingTable,
+        selectInputTable,
         radios,
         select,
         detail,
@@ -936,7 +963,13 @@
         detailTableList: detail.detailTableList,
         detailForm: JSON.parse(JSON.stringify(detail.detailForm)),
         inPutDataTree: JSON.parse(JSON.stringify(detail.inPutDataTree)),
-        outPutDataTree: JSON.parse(JSON.stringify(detail.outPutDataTree))
+        outPutDataTree: JSON.parse(JSON.stringify(detail.outPutDataTree)),
+        mappingMap: new Map(),
+        mapping: {
+          outputNodeMap: new Map(),
+          inputNodeMap: new Map(),
+          inputIndexMap: new Map()
+        }
       };
     },
     methods: {
@@ -1195,7 +1228,37 @@
       saveOutputData() {
       },
       saveOutputConnect() {
+        let protocol;
+        if (select.connectOut.selectValue === 1) {
+          protocol = connectOut.http;
+        } else if (select.connectOut.selectValue === 2) {
+          protocol = connectOut.https;
+        } else if (select.connectOut.selectValue === 3) {
+          protocol = connectOut.ftp;
+        } else if (select.connectOut.selectValue === 4) {
+          protocol = connectOut.sftp;
+        }
+        let model = {
+          projectId: this.detailForm.id,
+          type: select.connectOut.selectValue,
+          connectParamsList: []
+        };
+        for (let k of Object.keys(protocol)) {
+          console.log(k);
+          console.log(protocol[k]);
+          model.connectParamsList.push(new ConnectParam(k, protocol[k], ''));
+        };
 
+        console.log(model);
+        this.load(JSON.stringify(model), API_PROJECT_CONNECT_OUT.update, 'post').then((res) => {
+          if (res.errCode === 0) {
+            this.$message({type: 'success', message: res.msg, showClose: true});
+            this.loadDataRule();
+            ruleTable.position = 'list';
+          } else {
+            this.$message({type: 'error', message: res.msg, showClose: true});
+          }
+        });
       },
       saveImportRule() {
         let ids = '';
@@ -1239,6 +1302,27 @@
           }
         });
       },
+      saveMapping() {
+        let address;
+        if (mappingTable.id == null) {
+          address = API_DATA_MAPPING.add;
+        } else {
+          address = API_DATA_MAPPING.update;
+        }
+        let model = {
+          id: mappingTable.id,
+          projectId: this.detailForm.projectId,
+          indexMap: null
+        };
+        model.indexMap = this.buildUpdateMapping(mappingTable.tableTreeValue, null);
+        this.load(JSON.stringify(model), address, 'post').then((res) => {
+          if (res.errCode === 0) {
+            this.$message({type: 'success', message: res.msg, showClose: true});
+          } else {
+            this.$message({type: 'error', message: res.msg, showClose: true});
+          }
+        });
+      },
       callBackChange(obj) {
         if (obj === 1) {
             this.callBackShow = true;
@@ -1263,11 +1347,76 @@
         });
       },
       connectOutDataChange(obj) {
+        select.connectOut.selectValue = obj;
         this.connectOutShow.forEach((item) => {
           if (item.value === obj) {
             item.show = true;
           } else {
             item.show = false;
+          }
+        });
+      },
+      selectInputMapping(obj) {
+        if (obj == null || id === '' || obj.length === 0 || id === 'undefined') {
+          selectInputTable.chooseId = null;
+          return;
+        }
+        let id = obj.id;
+        selectInputTable.chooseId = id;
+        let inputIndexKey = this.findMappNode(id, mappingTable.tableTreeValue);
+        if (inputIndexKey == null || inputIndexKey.length === 0) {
+          selectInputTable.selectTreeValue.splice(0, selectInputTable.selectTreeValue.length);
+          return;
+        }
+
+        let valueArr = [];
+        while (inputIndexKey.indexOf('#') > 0) {
+          valueArr.push(this.mapping.inputIndexMap.get(inputIndexKey));
+          inputIndexKey = inputIndexKey.substring(0, inputIndexKey.lastIndexOf('#'));
+        }
+        valueArr.push(this.mapping.inputIndexMap.get(inputIndexKey));
+        valueArr.reverse();
+        selectInputTable.selectTreeValue.splice(0, selectInputTable.selectTreeValue.length);
+        valueArr.forEach((item) => {
+          selectInputTable.selectTreeValue.push(item);
+        });
+      },
+      findMappNode(id, nodeList) {
+        if (id == null) {
+          return;
+        }
+        if (nodeList == null) {
+          return;
+        }
+        let result;
+        for (let k = 0; k < nodeList.length; k++) {
+          let node = nodeList[k];
+          if (id === node.id) {
+            return node.inputNode;
+          }
+          if (node.children != null) {
+            result = this.findMappNode(id, node.children);
+          }
+          if (result != null) {
+            return result;
+          }
+        }
+      },
+      changeInputSelectNode(obj) {
+        let id = (obj[obj.length - 1]);
+        let mappingKey = this.mapping.inputNodeMap.get(id);
+        this.replaceMapping(mappingTable.tableTreeValue, mappingKey);
+      },
+      replaceMapping(nodeList, mappingKey) {
+        if (nodeList == null) {
+           return;
+        }
+        nodeList.forEach((item) => {
+          if (item.children != null) {
+             this.replaceMapping(item.children, mappingKey);
+          }
+          if (item.id === selectInputTable.chooseId) {
+            item.inputNode = mappingKey.indexKey;
           }
         });
       },
@@ -1344,11 +1493,9 @@
           return;
         }
         let paramsMap = new Map();
-        console.log(protocol);
         protocol.connectParamsList.forEach((item) => {
           paramsMap.set(item.name, item.value);
         });
-        console.log(paramsMap);
         if (protocol.type === 1) {
           let headsArr = [];
           let paramsArr = [];
@@ -1360,7 +1507,6 @@
           for (let k of Object.keys(params)) {
             paramsArr.push(new KeyValue(k, params[k]));
           }
-          console.log(params);
           connectOut.http.url = paramsMap.get('url');
           connectOut.http.heads = headsArr;
           connectOut.http.params = paramsArr;
@@ -1395,6 +1541,15 @@
         }
         this.connectOutDataChange(protocol.type);
       },
+      loadInputMap(dataNodeList) {
+        if (dataNodeList == null) {
+            return;
+        }
+        dataNodeList.forEach((item) => {
+          this.mapping.inputNodeMap.set(item.id, item);
+          this.loadInputMap(item.children);
+        });
+      },
       loadInputTree(id) {
         let model = {
           projectId: id
@@ -1402,6 +1557,9 @@
         this.load(JSON.stringify(model), API_DATA_TREE_INPUT.detail, 'post').then((res) => {
           if (res.errCode === 0) {
             this.inPutDataTree = res.data;
+            selectInputTable.selectTreeoptions = this.inPutDataTree.dataNodeList;
+            this.loadInputMap(this.inPutDataTree.dataNodeList);
+            this.loadInputIndexMap(this.inPutDataTree.dataNodeList);
           } else {
           }
         });
@@ -1421,6 +1579,24 @@
           }
         });
       },
+      loadOutputMap(dataNodeList) {
+        if (dataNodeList == null) {
+          return;
+        }
+        dataNodeList.forEach((item) => {
+          this.mapping.inputNodeMap.set(item.id, item);
+          this.loadOutputMap(item.children);
+        });
+      },
+      loadInputIndexMap(dataNodeList) {
+        if (dataNodeList == null) {
+          return;
+        }
+        dataNodeList.forEach((item) => {
+          this.mapping.inputIndexMap.set(item.indexKey, item.id);
+          this.loadInputIndexMap(item.children);
+        });
+      },
       loadOutputTree(id) {
         let model = {
           projectId: id
@@ -1428,11 +1604,69 @@
         this.load(JSON.stringify(model), API_DATA_TREE_OUTPUT.detail, 'post').then((res) => {
           if (res.errCode === 0) {
             this.outPutDataTree = res.data;
+            this.loadOutputMap(this.outPutDataTree.dataNodeList);
           } else {
           }
         });
       },
       loadMapping(id) {
+        let model = {
+            projectId: id
+        };
+        this.load(JSON.stringify(model), API_DATA_MAPPING.detail, 'post', true).then((res) => {
+          let code = res.errCode;
+          if (code === 0) {
+            for (let k of Object.keys(res.data.indexMap)) {
+              this.mappingMap.set(k, res.data.indexMap[k]);
+            };
+          }
+          mappingTable.id = res.data.id;
+          this.load(JSON.stringify(model), API_DATA_TREE_OUTPUT.detail, 'post', true).then((res) => {
+            let code = res.errCode;
+            if (code === 0) {
+              mappingTable.tableTreeValue.splice(0, this.table.data.length);
+              mappingTable.tableTreeValue = this.buildNode(res.data.dataNodeList);
+            }
+          });
+        });
+      },
+      buildUpdateMapping(nodeList, map) {
+        if (map == null) {
+          map = Object.create(null);
+        }
+        if (nodeList == null) {
+          return map;
+        }
+        nodeList.forEach((item) => {
+          map[item.indexKey] = item.inputNode;
+          this.buildUpdateMapping(item.children, map);
+        });
+        return map;
+      },
+      buildNode(itemList, indexKey) {
+        if (itemList == null) {
+            return null;
+        };
+        if (indexKey == null) {
+            indexKey = '';
+        } else {
+            indexKey = indexKey + '#';
+        }
+        let treeList = [];
+        if (itemList.size <= 1) {
+          return null;
+        }
+        itemList.forEach((item) => {
+          let treeNode = new TreeNode();
+          treeNode.id = item.id;
+          treeNode.name = item.name;
+          treeNode.pid = item.fatherId;
+          treeNode.indexKey = indexKey + item.name;
+          treeNode.inputNode = this.mappingMap.get(treeNode.indexKey);
+          treeNode.children = this.buildNode(item.children, indexKey + item.name);
+          treeList.push(treeNode);
+        });
+        return treeList;
       },
       loadImportRule(currentPage, pageSize) {
         if (currentPage) {
@@ -1478,4 +1712,18 @@
     this.key = key;
     this.value = value;
   };
+  function TreeNode(id, name, pid, children, inputNode, indexKey, operate) {
+    this.id = id;
+    this.name = name;
+    this.pid = pid;
+    this.inputNode = inputNode;
+    this.indexKey = indexKey;
+    this.children = children;
+    this.operate = operate;
+  }
+  function ConnectParam(name, value, desc) {
+      this.name = name;
+      this.value = value;
+      this.desc = desc;
+  }
 </script>

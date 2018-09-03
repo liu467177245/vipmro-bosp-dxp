@@ -31,6 +31,9 @@ export const API_PROJECT = {
   start: `${baseApi}/v1.0.0/project/start`,
   stop: `${baseApi}/v1.0.0/project/stop`
 };
+export const API_PROJECT_CONNECT_OUT = {
+  update: `${baseApi}/v1.0.0/project/connect/out/update`
+};
 export const API_DATA_TREE_INPUT = {
   update: `${baseApi}/v1.0.0/dataTree/input/update`,
   detail: `${baseApi}/v1.0.0/dataTree/input/detail`,
@@ -45,5 +48,11 @@ export const API_DATA_TREE_OUTPUT = {
 };
 export const API_LOG_REQUEST = {
   list: `${baseApi}/v1.0.0/logRequest/list`
+};
+export const API_DATA_MAPPING = {
+  detail: `${baseApi}/v1.0.0/dataMapper/detail`,
+  add: `${baseApi}/v1.0.0/dataMapper/add`,
+  delete: `${baseApi}/v1.0.0/dataMapper/delete`,
+  update: `${baseApi}/v1.0.0/dataMapper/update`
 };
 

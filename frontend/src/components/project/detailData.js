@@ -102,7 +102,7 @@ export let radios = {
 };
 export let select = {
   connectIn: {
-    selectValue: 0,
+    selectValue: null,
     selectOptions: [{
       value: 1,
       text: 'http'
@@ -209,6 +209,9 @@ export let select = {
   filterType: {
     selectValue: 1,
     selectOptions: [{
+      value: null,
+      text: ''
+    }, {
       value: 1,
       text: '隐藏手机号码'
     }, {
@@ -417,4 +420,28 @@ export let ruleImportTable = {
   type: 1,
   width: '1000px'
 };
+export let mappingTable = {
+  id: null,
+  chooseId: null,
+  tableTreeHeader: [{
+    name: '输出格式',
+    width: '375',
+    nameKey: 'name',
+    isTree: true
+  }, {
+    name: '映射',
+    width: '300',
+    nameKey: 'inputNode'
+  }],
+  tableTreeValue: []
+};
 
+export let selectInputTable = {
+  selectTreeValue: [],
+  props: {
+    children: 'children',
+    label: 'name',
+    value: 'id'
+  },
+  selectTreeoptions: []
+};

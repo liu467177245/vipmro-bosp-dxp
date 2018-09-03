@@ -1,14 +1,19 @@
 <template>
-  <div>
-    <VipmroJsonEditor
-      :props="props"
-      :options="options"
-      :forbitDrag="forbitDrag"
-      :forbitDrop="forbitDrop"
-      :defaultExpandedKeys="defaultExpandedKeys"
-      @dragEnd="handleDragEnd"
-      @nodeClick="handleNodeClick"
-    ></VipmroJsonEditor>
+  <div class="webui-cascader">
+    <vipmro-cascader
+      v-model="cascaderValue"
+      :options="cascaderOptions"
+      :filterable="filterable"
+    ></vipmro-cascader>
+    <vipmro-button
+      :title="title"
+      @click="changeData"
+    ></vipmro-button>
+
+    <vipmro-button
+      :title="title"
+      @click="reFelsh"
+    ></vipmro-button>
   </div>
 </template>
 
@@ -16,50 +21,39 @@
   export default {
     data() {
       return {
-        /* 节点参数 */
-        props: {
-          children: 'children',
-          label: 'name'
-        },
-        /* 不允许拖拽的节点 */
-        forbitDrag: [1, 10],
-        /* 拖拽不允许放置的节点 */
-        forbitDrop: [2],
-        /* 默认展开的节点 */
-        defaultExpandedKeys: [1, 4, 9],
-        options: [{
-          id: '182858281641975800',
-          name: '一级 1',
+        filterable: true,
+        cascaderValue: [12231],
+        title: 'tkjk',
+        cascaderOptions: [{
+          name: '江苏',
+          id: 12231,
           children: [{
-            id: '182858281641975800',
-            name: '二级 1-1',
+            name: '南京',
+            id: 12567,
             children: [{
-              id: 9,
-              name: '三级 1-1-1'
-            }, {
-              id: 10,
-              name: '三级 1-1-2'
+              name: '南京1',
+              id: 125671
             }]
+          }, {
+            name: '苏州',
+            id: 125678
           }]
         }, {
-          id: 2,
-          name: '一级 2 <button>123</button>',
-          children: [{
-            id: 5,
-            name: '二级 2-1'
-          }, {
-            id: 6,
-            name: '二级 2-2'
-          }]
+          name: '浙江',
+          id: 122312
         }]
       };
     },
     methods: {
-      handleDragEnd(draggingNode, dropNode, dropType, ev) {
-        console.log('tree drag end');
+      changeData() {
+          console.log(1231231);
+        this.cascaderValue.push(12231);
+        this.cascaderValue.push(12567);
+        this.cascaderValue.push(125671);
       },
-      handleNodeClick(data, node, component) {
-        console.log('node click');
+      reFelsh () {
+        this.cascaderValue.splice(0, this.cascaderValue.length);
+        this.cascaderValue.push(12231);
       }
     }
   };
