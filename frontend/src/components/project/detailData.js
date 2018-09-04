@@ -23,6 +23,9 @@ export let detail = {
   }, {
     title: '规则',
     name: 'rule'
+  }, {
+    title: '测试',
+    name: 'testing'
   }],
   detailForm: {
     id: null,
@@ -30,8 +33,6 @@ export let detail = {
     describe: null,
     obtainDataType: null,
     needSynBack: null,
-    inPutDataTreeId: null,
-    outPutDataTreeId: null,
     dataMapperId: null,
     status: null,
     taskFrequency: {
@@ -52,7 +53,7 @@ export let detail = {
     callBack: {
       id: null,
       projectId: null,
-      address: null,
+      address: '',
       postParams: []
     }
   },
@@ -220,7 +221,7 @@ export let select = {
     }]
   }
 };
-export let connectIn = {
+export let connectProtocolIn = {
   http: {
     url: '',
     heads: [],
@@ -248,7 +249,7 @@ export let connectIn = {
     password: ''
   }
 };
-export let connectOut = {
+export let connectProtocolOut = {
   http: {
     url: '',
     heads: [],
@@ -435,7 +436,6 @@ export let mappingTable = {
   }],
   tableTreeValue: []
 };
-
 export let selectInputTable = {
   selectTreeValue: [],
   props: {

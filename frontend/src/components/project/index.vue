@@ -18,7 +18,7 @@
         <div class="">
           <vipmro-layout-top>
             <vipmro-query-select>
-              <vipmro-input width="200" placeholder="请输入规则名称" v-model="table.keyword" title="关键词"></vipmro-input>
+              <vipmro-input width="200" placeholder="请输入关键词" v-model="table.keyword" title="关键词"></vipmro-input>
             </vipmro-query-select>
             <vipmro-operation-button>
               <vipmro-button v-for="item in button" :title="item.name" @click="buttonMethod(item.method)"
@@ -51,25 +51,25 @@
             <template slot="baseInfo">
               <vipmro-layout-top v-model="ruleEditHeight.top">
                 <vipmro-operation-button>
-                  <vipmro-button :title="'保存'" @click="saveProject" :disabled="!saveBtnShow"></vipmro-button>
+                  <vipmro-button :title="'保存'" @click="saveProject" :disabled="!saveProjectShow"></vipmro-button>
                 </vipmro-operation-button>
               </vipmro-layout-top>
               <vipmro-layout-main>
                 <vipmro-form-validator :value="detailForm">
                   <vipmro-cols :cols="24">
                     <vipmro-form-item type="name" title="项目名称">
-                      <vipmro-input v-model="detailForm.name" :top="2" width="220"
-                                    :readonly="!saveBtnShow"></vipmro-input>
+                      <vipmro-input v-model="detailForm.name" :top="2" width="444"
+                                    :readonly="!saveProjectShow"></vipmro-input>
                     </vipmro-form-item>
                   </vipmro-cols>
                   <vipmro-cols>
                     <vipmro-form-item type="describe" title="项目描述">
                       <vipmro-textarea v-model="detailForm.describe"
                                        :top="2"
-                                       width="500"
+                                       width="444"
                                        :rows=10
                                        :changeBackground="true"
-                                       :readonly="!saveBtnShow"></vipmro-textarea>
+                                       :readonly="!saveProjectShow"></vipmro-textarea>
                     </vipmro-form-item>
                   </vipmro-cols>
                   <vipmro-cols>
@@ -87,9 +87,9 @@
                       <vipmro-form-item type="url" title="回调地址">
                         <vipmro-input v-model="detailForm.callBack.address"
                                       :top="2"
-                                      width="220"
+                                      width="444"
                                       :changeBackground="true"
-                                      :readonly="!saveBtnShow"></vipmro-input>
+                                      :readonly="!saveProjectShow"></vipmro-input>
                       </vipmro-form-item>
                     </vipmro-cols>
                     <vipmro-cols>
@@ -123,9 +123,9 @@
                       <vipmro-form-item type="taskFrequency.cronExpression" title="频率" v-show="obtainShow">
                         <vipmro-input v-model="detailForm.taskFrequency.cronExpression"
                                       :top="2"
-                                      width="220"
+                                      width="444"
                                       :changeBackground="true"
-                                      :readonly="!saveBtnShow"></vipmro-input>
+                                      :readonly="!saveProjectShow"></vipmro-input>
                       </vipmro-form-item>
                     </vipmro-cols>
                     <vipmro-cols>
@@ -134,8 +134,8 @@
                           <vipmro-select
                             :options="select.connectIn.selectOptions"
                             v-model="detailForm.inputProtocol.type"
-                            :width="220"
-                            :readonly="!saveBtnShow"
+                            :width="444"
+                            :readonly="!saveProjectShow"
                             @change="connectInDataChange"
                           ></vipmro-select>
                         </div>
@@ -147,9 +147,9 @@
                           <vipmro-form-item title="url" v-show="connectInShow[0].show">
                             <vipmro-input v-model="connectIn.http.url"
                                           :top="2"
-                                          width="220"
+                                          width="444"
                                           :changeBackground="true"
-                                          :readonly="!saveBtnShow"></vipmro-input>
+                                          :readonly="!saveProjectShow"></vipmro-input>
                           </vipmro-form-item>
                         </vipmro-cols>
                         <vipmro-cols>
@@ -158,8 +158,8 @@
                               <vipmro-add-html v-model="connectIn.http.heads" :isLastShowMinus=true>
                                 <template slot-scope="props">
                                   <vipmro-cols>
-                                    <vipmro-input v-model="props.item.key" width="220"></vipmro-input>
-                                    <vipmro-input v-model="props.item.value" width="220"></vipmro-input>
+                                    <vipmro-input v-model="props.item.key" width="444"></vipmro-input>
+                                    <vipmro-input v-model="props.item.value" width="444"></vipmro-input>
                                   </vipmro-cols>
                                 </template>
                               </vipmro-add-html>
@@ -187,9 +187,9 @@
                           <vipmro-form-item title="url" v-show="connectInShow[1].show">
                             <vipmro-input v-model="connectIn.https.url"
                                           :top="2"
-                                          width="220"
+                                          width="444"
                                           :changeBackground="true"
-                                          :readonly="!saveBtnShow"></vipmro-input>
+                                          :readonly="!saveProjectShow"></vipmro-input>
                           </vipmro-form-item>
                         </vipmro-cols>
                         <vipmro-cols>
@@ -227,54 +227,54 @@
                           <vipmro-form-item title="url" v-show="connectInShow[2].show">
                             <vipmro-input v-model="connectIn.ftp.url"
                                           :top="2"
-                                          width="220"
+                                          width="444"
                                           :changeBackground="true"
-                                          :readonly="!saveBtnShow"></vipmro-input>
+                                          :readonly="!saveProjectShow"></vipmro-input>
                           </vipmro-form-item>
                         </vipmro-cols>
                         <vipmro-cols>
                           <vipmro-form-item title="port" v-show="connectInShow[2].show">
                             <vipmro-input v-model="connectIn.ftp.port"
                                           :top="2"
-                                          width="220"
+                                          width="444"
                                           :changeBackground="true"
-                                          :readonly="!saveBtnShow"></vipmro-input>
+                                          :readonly="!saveProjectShow"></vipmro-input>
                           </vipmro-form-item>
                         </vipmro-cols>
                         <vipmro-cols>
                           <vipmro-form-item title="filePath" v-show="connectInShow[2].show">
                             <vipmro-input v-model="connectIn.ftp.filePath"
                                           :top="2"
-                                          width="220"
+                                          width="444"
                                           :changeBackground="true"
-                                          :readonly="!saveBtnShow"></vipmro-input>
+                                          :readonly="!saveProjectShow"></vipmro-input>
                           </vipmro-form-item>
                         </vipmro-cols>
                         <vipmro-cols>
                           <vipmro-form-item title="fileName" v-show="connectInShow[2].show">
                             <vipmro-input v-model="connectIn.ftp.fileName"
                                           :top="2"
-                                          width="220"
+                                          width="444"
                                           :changeBackground="true"
-                                          :readonly="!saveBtnShow"></vipmro-input>
+                                          :readonly="!saveProjectShow"></vipmro-input>
                           </vipmro-form-item>
                         </vipmro-cols>
                         <vipmro-cols>
                           <vipmro-form-item title="account" v-show="connectInShow[2].show">
                             <vipmro-input v-model="connectIn.ftp.account"
                                           :top="2"
-                                          width="220"
+                                          width="444"
                                           :changeBackground="true"
-                                          :readonly="!saveBtnShow"></vipmro-input>
+                                          :readonly="!saveProjectShow"></vipmro-input>
                           </vipmro-form-item>
                         </vipmro-cols>
                         <vipmro-cols>
                           <vipmro-form-item title="password" v-show="connectInShow[2].show">
                             <vipmro-input v-model="connectIn.ftp.password"
                                           :top="2"
-                                          width="220"
+                                          width="444"
                                           :changeBackground="true"
-                                          :readonly="!saveBtnShow"></vipmro-input>
+                                          :readonly="!saveProjectShow"></vipmro-input>
                           </vipmro-form-item>
                         </vipmro-cols>
                       </template>
@@ -283,54 +283,54 @@
                           <vipmro-form-item title="url" v-show="connectInShow[3].show">
                             <vipmro-input v-model="connectIn.sftp.url"
                                           :top="2"
-                                          width="220"
+                                          width="444"
                                           :changeBackground="true"
-                                          :readonly="!saveBtnShow"></vipmro-input>
+                                          :readonly="!saveProjectShow"></vipmro-input>
                           </vipmro-form-item>
                         </vipmro-cols>
                         <vipmro-cols>
                           <vipmro-form-item title="port" v-show="connectInShow[3].show">
                             <vipmro-input v-model="connectIn.sftp.port"
                                           :top="2"
-                                          width="220"
+                                          width="444"
                                           :changeBackground="true"
-                                          :readonly="!saveBtnShow"></vipmro-input>
+                                          :readonly="!saveProjectShow"></vipmro-input>
                           </vipmro-form-item>
                         </vipmro-cols>
                         <vipmro-cols>
                           <vipmro-form-item title="filePath" v-show="connectInShow[3].show">
                             <vipmro-input v-model="connectIn.sftp.filePath"
                                           :top="2"
-                                          width="220"
+                                          width="444"
                                           :changeBackground="true"
-                                          :readonly="!saveBtnShow"></vipmro-input>
+                                          :readonly="!saveProjectShow"></vipmro-input>
                           </vipmro-form-item>
                         </vipmro-cols>
                         <vipmro-cols>
                           <vipmro-form-item title="fileName" v-show="connectInShow[3].show">
                             <vipmro-input v-model="connectIn.sftp.fileName"
                                           :top="2"
-                                          width="220"
+                                          width="444"
                                           :changeBackground="true"
-                                          :readonly="!saveBtnShow"></vipmro-input>
+                                          :readonly="!saveProjectShow"></vipmro-input>
                           </vipmro-form-item>
                         </vipmro-cols>
                         <vipmro-cols>
                           <vipmro-form-item title="account" v-show="connectInShow[3].show">
                             <vipmro-input v-model="connectIn.sftp.account"
                                           :top="2"
-                                          width="220"
+                                          width="444"
                                           :changeBackground="true"
-                                          :readonly="!saveBtnShow"></vipmro-input>
+                                          :readonly="!saveProjectShow"></vipmro-input>
                           </vipmro-form-item>
                         </vipmro-cols>
                         <vipmro-cols>
                           <vipmro-form-item title="password" v-show="connectInShow[3].show">
                             <vipmro-input v-model="connectIn.sftp.password"
                                           :top="2"
-                                          width="220"
+                                          width="444"
                                           :changeBackground="true"
-                                          :readonly="!saveBtnShow"></vipmro-input>
+                                          :readonly="!saveProjectShow"></vipmro-input>
                           </vipmro-form-item>
                         </vipmro-cols>
                       </template>
@@ -339,9 +339,6 @@
 
                 </vipmro-form-validator>
               </vipmro-layout-main>
-            </template>
-
-            <template slot="inPutConnect">
             </template>
 
             <template slot="inPutData">
@@ -356,6 +353,7 @@
                     <vipmro-select
                       :options="select.dataType.selectOptions"
                       v-model="inPutDataTree.dataFormat.type"
+                      :readonly="!saveBtnShow"
                       :width="220"
                     ></vipmro-select>
                   </vipmro-form-item>
@@ -384,6 +382,7 @@
                           <vipmro-select
                             :options="select.nodeType.selectOptions"
                             v-model="chooseNode.input.dataType"
+                            :readonly="!saveBtnShow"
                             :width="220"
                           ></vipmro-select>
                         </vipmro-form-item>
@@ -408,6 +407,7 @@
                     <vipmro-select
                       :options="select.dataType.selectOptions"
                       v-model="outPutDataTree.dataFormat.type"
+                      :readonly="!saveBtnShow"
                       :width="220"
                     ></vipmro-select>
                   </vipmro-form-item>
@@ -436,6 +436,7 @@
                           <vipmro-select
                             :options="select.nodeType.selectOptions"
                             v-model="chooseNode.output.dataType"
+                            :readonly="!saveBtnShow"
                             :width="220"
                           ></vipmro-select>
                         </vipmro-form-item>
@@ -445,6 +446,7 @@
                           <vipmro-select
                             :options="select.filterType.selectOptions"
                             v-model="chooseNode.output.filterType"
+                            :readonly="!saveBtnShow"
                             :width="220"
                           ></vipmro-select>
                         </vipmro-form-item>
@@ -481,6 +483,7 @@
                   :props="selectInputTable.props"
                   :changeOnSelect="true"
                   :width="300"
+                  :readonly="!saveBtnShow"
                   @change="changeInputSelectNode"
                 ></vipmro-cascader>
               </vipmro-layout-left>
@@ -502,7 +505,7 @@
                         <vipmro-select
                           :options="select.connectOut.selectOptions"
                           v-model="detailForm.outputProtocol.type"
-                          :width="220"
+                          :width="444"
                           :readonly="!saveBtnShow"
                           @change="connectOutDataChange"
                         ></vipmro-select>
@@ -517,7 +520,7 @@
                         <vipmro-form-item title="url" v-show="connectOutShow[0].show">
                           <vipmro-input v-model="connectOut.http.url"
                                         :top="2"
-                                        width="220"
+                                        width="444"
                                         :changeBackground="true"
                                         :readonly="!saveBtnShow"></vipmro-input>
                         </vipmro-form-item>
@@ -816,6 +819,37 @@
 
               </vipmro-dialog>
             </template>
+
+            <template slot="testing">
+              <vipmro-layout-top>
+
+              </vipmro-layout-top>
+              <vipmro-layout-left width="500">
+                <vipmro-textarea v-model="testingData.inputData"
+                                 :top="2"
+                                 width="350"
+                                 placeholder="请输入请求数据"
+                                 :rows=30
+                                 :changeBackground="true"
+                                 :readonly="!saveBtnShow"></vipmro-textarea>
+              </vipmro-layout-left>
+              <vipmro-layout-left width="200">
+                <vipmro-button
+                  top="200"
+                  title="开始测试"
+                  @click="testing">
+                </vipmro-button>
+              </vipmro-layout-left>
+              <vipmro-layout-left width="500">
+                <vipmro-textarea v-model="testingData.outputData"
+                                 :top="2"
+                                 width="350"
+                                 placeholder="结果......"
+                                 :rows=30
+                                 :changeBackground="true"
+                                 :readonly="true"></vipmro-textarea>
+              </vipmro-layout-left>
+            </template>
           </vipmro-tab>
 
         </vipmro-layout-main>
@@ -846,7 +880,7 @@
   import {API_PROJECT, API_DATA_TREE_INPUT, API_DATA_RULE, API_DATA_TREE_OUTPUT, API_DATA_MAPPING, API_PROJECT_CONNECT_OUT} from '../common/apiConstant';
   import {button, editHeight, table, dict} from './data';
   import {vText, vNumber} from '../common/validator';
-  import {detail, radios, select, connectIn, connectOut, inputTree, outputTree, ruleTable, ruleButton,
+  import {detail, radios, select, connectProtocolIn, connectProtocolOut, inputTree, outputTree, ruleTable, ruleButton,
     ruleEditHeight, ruleDetailForm, ruleImportTable, mappingTable, selectInputTable} from './detailData';
 
   export default {
@@ -866,8 +900,8 @@
         radios,
         select,
         detail,
-        connectIn,
-        connectOut,
+        connectIn: JSON.parse(JSON.stringify(connectProtocolIn)),
+        connectOut: JSON.parse(JSON.stringify(connectProtocolOut)),
         inputTree,
         outputTree,
         chooseNode: {
@@ -918,8 +952,10 @@
           name: 'sftp',
           show: false
         }],
+        saveBtnShow: false,
         callBackShow: false,
         obtainShow: false,
+        saveProjectShow: false,
         typeValidator: {
           type: '',
           required: true,
@@ -929,7 +965,6 @@
           ruleSaveBtnShow: false,
           form: JSON.parse(JSON.stringify(ruleDetailForm))
         },
-        saveBtnShow: false,
         detailDialog: {
           dialogVisible: false,
           title: '提示',
@@ -969,6 +1004,10 @@
           outputNodeMap: new Map(),
           inputNodeMap: new Map(),
           inputIndexMap: new Map()
+        },
+        testingData: {
+            inputData: null,
+            outputData: null
         }
       };
     },
@@ -982,17 +1021,34 @@
         /** 项目基本信息 **/
         this.load(JSON.stringify(model), API_PROJECT.detail, 'post').then((res) => {
           if (res.errCode === 0) {
-            if (res.data.taskFrequency == null) {
-              res.data.taskFrequency = this.detailForm.taskFrequency;
+            table.position = 'detail';
+            this.detailTabPosition = 'baseInfo';
+            this.saveProjectShow = true;
+            this.saveBtnShow = true;
+            table.list[1].title = res.data.id;
+            this.detailForm.id = res.data.id;
+            this.detailForm.name = res.data.name;
+            this.detailForm.describe = res.data.describe;
+            this.detailForm.obtainDataType = res.data.obtainDataType;
+            this.detailForm.needSynBack = res.data.needSynBack;
+            this.detailForm.dataMapperId = res.data.dataMapperId;
+            if (res.data.taskFrequency == null || res.data.taskFrequency === 'undefined') {
+            } else {
+              this.detailForm.taskFrequency = res.data.taskFrequency;
             }
-            this.detailForm = res.data;
+            if (res.data.callBack == null || res.data.callBack === 'undefined') {
+            } else {
+              this.detailForm.callBack = res.data.callBack;
+            }
+            this.detailForm.inputProtocol = res.data.inputProtocol;
+            if (res.data.outputProtocol == null || res.data.outputProtocol === 'undefined') {
+            } else {
+              this.detailForm.outputProtocol = res.data.outputProtocol;
+            }
             this.obtainDataTypeChange(this.detailForm.obtainDataType);
             this.buildConnectInData(this.detailForm.inputProtocol);
             this.buildConnectOutData(this.detailForm.outputProtocol);
             this.buildCallbackData(res.data);
-            table.position = 'detail';
-            this.detailTabPosition = 'baseInfo';
-            this.saveBtnShow = true;
             this.loadInputTree(this.detailForm.id);
             this.loadOutputTree(this.detailForm.id);
             this.loadMapping(this.detailForm.id);
@@ -1178,9 +1234,19 @@
         });
       },
       add() {
+        table.list[1].title = '新增';
         table.position = 'detail';
-        this.saveBtnShow = true;
+        this.saveProjectShow = true;
         this.detailForm = JSON.parse(JSON.stringify(detail.detailForm));
+        this.inPutDataTree = JSON.parse(JSON.stringify(detail.inPutDataTree));
+        this.outPutDataTree = JSON.parse(JSON.stringify(detail.outPutDataTree));
+        mappingTable.tableTreeValue.splice(0, this.table.data.length);
+        this.mapping.outputNodeMap = new Map();
+        this.mapping.inputNodeMap = new Map();
+        this.mapping.inputIndexMap = new Map();
+        this.connectIn = JSON.parse(JSON.stringify(connectProtocolIn));
+        this.connectOut = JSON.parse(JSON.stringify(connectProtocolOut));
+        this.ruleTable.data.splice(0, this.ruleTable.data.length);
       },
       addRule() {
         this.ruleTable.position = 'detail';
@@ -1213,43 +1279,89 @@
           }
         });
       },
-      save() {
-        this.load(JSON.stringify(detail), API_PROJECT.update, 'post').then((res) => {
+      saveProject() {
+        let address;
+        if (this.detailForm.id == null || this.detailForm.id === 'undefined') {
+          address = API_PROJECT.add;
+        } else {
+          address = API_PROJECT.update;
+        }
+        let model = {
+          id: this.detailForm.id,
+          name: this.detailForm.name,
+          describe: this.detailForm.describe,
+          needSynBack: this.detailForm.needSynBack,
+          obtainDataType: this.detailForm.obtainDataType,
+          callBack: null,
+          taskFrequency: this.detailForm.taskFrequency,
+          connectProtocolIn: this.buildConnectProtocol(select.connectIn.selectValue, this.connectIn)
+        };
+        let obj = Object.create(null);
+        for (let k of Object.keys(this.detailForm.callBack.postParams)) {
+          obj[this.detailForm.callBack.postParams[k].key] = this.detailForm.callBack.postParams[k].value;
+        }
+        model.callBack = {
+          address: this.detailForm.callBack.address,
+          postParams: obj
+        };
+        this.load(JSON.stringify(model), address, 'post').then((res) => {
           if (res.errCode === 0) {
+            this.detailForm.id = res.data;
+            this.saveProjectShow = true;
+            this.$message({type: 'success', message: res.msg, showClose: true});
           } else {
             this.$message({type: 'error', message: res.msg, showClose: true});
           }
         });
       },
-      saveProject() {
-      },
       saveInputData() {
+        let model = {
+          id: this.inPutDataTree.id,
+          projectId: this.detailForm.id,
+          children: this.inPutDataTree.dataNodeList[0].children,
+          dataFormat: {
+              type: this.inPutDataTree.dataFormat.type
+          }
+        };
+        let address;
+        if (this.inPutDataTree.id == null || this.inPutDataTree.id === 'undefined') {
+            address = API_DATA_TREE_INPUT.add;
+        } else {
+            address = API_DATA_TREE_INPUT.update;
+        }
+        this.load(JSON.stringify(model), address, 'post').then((res) => {
+          if (res.errCode === 0) {
+            this.$message({type: 'success', message: res.msg, showClose: true});
+          } else {
+            this.$message({type: 'error', message: res.msg, showClose: true});
+          }
+        });
       },
       saveOutputData() {
+        let model = {
+          id: this.outPutDataTree.id,
+          projectId: this.detailForm.id,
+          children: this.outPutDataTree.dataNodeList[0].children,
+          dataFormat: {
+            type: this.outPutDataTree.dataFormat.type
+          }
+        };
+        let address;
+        if (this.outPutDataTree.id == null || this.outPutDataTree.id === 'undefined') {
+          address = API_DATA_TREE_OUTPUT.add;
+        } else {
+          address = API_DATA_TREE_OUTPUT.update;
+        }
+        this.load(JSON.stringify(model), address, 'post').then((res) => {
+          if (res.errCode === 0) {
+            this.$message({type: 'success', message: res.msg, showClose: true});
+          } else {
+            this.$message({type: 'error', message: res.msg, showClose: true});
+          }
+        });
       },
       saveOutputConnect() {
-        let protocol;
-        if (select.connectOut.selectValue === 1) {
-          protocol = connectOut.http;
-        } else if (select.connectOut.selectValue === 2) {
-          protocol = connectOut.https;
-        } else if (select.connectOut.selectValue === 3) {
-          protocol = connectOut.ftp;
-        } else if (select.connectOut.selectValue === 4) {
-          protocol = connectOut.sftp;
-        }
-        let model = {
-          projectId: this.detailForm.id,
-          type: select.connectOut.selectValue,
-          connectParamsList: []
-        };
-        for (let k of Object.keys(protocol)) {
-          console.log(k);
-          console.log(protocol[k]);
-          model.connectParamsList.push(new ConnectParam(k, protocol[k], ''));
-        };
-
-        console.log(model);
+        let model = this.buildConnectProtocol(select.connectOut.selectValue, this.connectOut);
         this.load(JSON.stringify(model), API_PROJECT_CONNECT_OUT.update, 'post').then((res) => {
           if (res.errCode === 0) {
             this.$message({type: 'success', message: res.msg, showClose: true});
@@ -1304,7 +1416,7 @@
       },
       saveMapping() {
         let address;
-        if (mappingTable.id == null) {
+        if (mappingTable.id == null || mappingTable.id === 'undefined') {
           address = API_DATA_MAPPING.add;
         } else {
           address = API_DATA_MAPPING.update;
@@ -1325,9 +1437,9 @@
       },
       callBackChange(obj) {
         if (obj === 1) {
-            this.callBackShow = true;
-        } else {
             this.callBackShow = false;
+        } else {
+            this.callBackShow = true;
         }
       },
       obtainDataTypeChange(obj) {
@@ -1338,6 +1450,7 @@
           }
       },
       connectInDataChange(obj) {
+        select.connectIn.selectValue = obj;
         this.connectInShow.forEach((item) => {
             if (item.value === obj) {
               item.show = true;
@@ -1363,7 +1476,7 @@
         }
         let id = obj.id;
         selectInputTable.chooseId = id;
-        let inputIndexKey = this.findMappNode(id, mappingTable.tableTreeValue);
+        let inputIndexKey = this.findMappingNode(id, mappingTable.tableTreeValue);
         if (inputIndexKey == null || inputIndexKey.length === 0) {
           selectInputTable.selectTreeValue.splice(0, selectInputTable.selectTreeValue.length);
           return;
@@ -1381,11 +1494,11 @@
           selectInputTable.selectTreeValue.push(item);
         });
       },
-      findMappNode(id, nodeList) {
-        if (id == null) {
+      findMappingNode(id, nodeList) {
+        if (id == null || id === 'undefined') {
           return;
         }
-        if (nodeList == null) {
+        if (nodeList == null || nodeList === 'undefined') {
           return;
         }
         let result;
@@ -1395,7 +1508,7 @@
             return node.inputNode;
           }
           if (node.children != null) {
-            result = this.findMappNode(id, node.children);
+            result = this.findMappingNode(id, node.children);
           }
           if (result != null) {
             return result;
@@ -1408,7 +1521,7 @@
         this.replaceMapping(mappingTable.tableTreeValue, mappingKey);
       },
       replaceMapping(nodeList, mappingKey) {
-        if (nodeList == null) {
+        if (nodeList == null || nodeList === 'undefined') {
            return;
         }
         nodeList.forEach((item) => {
@@ -1421,21 +1534,28 @@
         });
       },
       buildCallbackData(obj) {
-        let needSynBack = 1;
-        if (obj.needSynBack === null || obj.needSynBack === false) {
+        if (obj == null || obj === 'undefined') {
+           return;
+        }
+        let needSynBack;
+        if (obj.needSynBack == null || obj.needSynBack === 'undefined' || obj.needSynBack === false) {
           needSynBack = 2;
+        } else {
+          needSynBack = 1;
         }
         this.detailForm.needSynBack = needSynBack;
         this.callBackChange(needSynBack);
-        let paramsArr = [];
-        let params = obj.callBack.postParams;
-        for (let k of Object.keys(params)) {
-          paramsArr.push(new KeyValue(k, params[k]));
+        if (needSynBack === 2) {
+          let paramsArr = [];
+          let params = obj.callBack.postParams;
+          for (let k of Object.keys(params)) {
+            paramsArr.push(new KeyValue(k, params[k]));
+          }
+          this.detailForm.callBack.postParams = paramsArr;
         }
-        this.detailForm.callBack.postParams = paramsArr;
       },
       buildConnectInData(protocol) {
-        if (protocol === null) {
+        if (protocol == null || protocol === 'undefined') {
           return;
         }
         let paramsMap = new Map();
@@ -1453,9 +1573,9 @@
           for (let k of Object.keys(params)) {
             paramsArr.push(new KeyValue(k, params[k]));
           }
-          connectIn.http.url = paramsMap.get('url');
-          connectIn.http.heads = headsArr;
-          connectIn.http.params = paramsArr;
+          this.connectIn.http.url = paramsMap.get('url');
+          this.connectIn.http.heads = headsArr;
+          this.connectIn.http.params = paramsArr;
         } else if (protocol.type === 2) {
           let headsArr = [];
           let paramsArr = [];
@@ -1468,28 +1588,28 @@
           for (let k of Object.keys(params)) {
             paramsArr.push(new KeyValue(k, params[k]));
           }
-          connectIn.https.url = paramsMap.get('url');
-          connectIn.https.heads = headsArr;
-          connectIn.https.params = paramsArr;
+          this.connectIn.https.url = paramsMap.get('url');
+          this.connectIn.https.heads = headsArr;
+          this.connectIn.https.params = paramsArr;
         } else if (protocol.type === 3) {
-          connectIn.ftp.host = paramsMap.get('host');
-          connectIn.ftp.port = paramsMap.get('port');
-          connectIn.ftp.filePath = paramsMap.get('filePath');
-          connectIn.ftp.fileName = paramsMap.get('fileName');
-          connectIn.ftp.account = paramsMap.get('account');
-          connectIn.ftp.password = paramsMap.get('password');
+          this.connectIn.ftp.host = paramsMap.get('host');
+          this.connectIn.ftp.port = paramsMap.get('port');
+          this.connectIn.ftp.filePath = paramsMap.get('filePath');
+          this.connectIn.ftp.fileName = paramsMap.get('fileName');
+          this.connectIn.ftp.account = paramsMap.get('account');
+          this.connectIn.ftp.password = paramsMap.get('password');
         } else if (protocol.type === 4) {
-          connectIn.sftp.host = paramsMap.get('host');
-          connectIn.sftp.port = paramsMap.get('port');
-          connectIn.sftp.filePath = paramsMap.get('filePath');
-          connectIn.sftp.fileName = paramsMap.get('fileName');
-          connectIn.sftp.account = paramsMap.get('account');
-          connectIn.sftp.password = paramsMap.get('password');
+          this.connectIn.sftp.host = paramsMap.get('host');
+          this.connectIn.sftp.port = paramsMap.get('port');
+          this.connectIn.sftp.filePath = paramsMap.get('filePath');
+          this.connectIn.sftp.fileName = paramsMap.get('fileName');
+          this.connectIn.sftp.account = paramsMap.get('account');
+          this.connectIn.sftp.password = paramsMap.get('password');
         }
         this.connectInDataChange(protocol.type);
       },
       buildConnectOutData(protocol) {
-        if (protocol === null) {
+        if (protocol == null || protocol === 'undefined') {
           return;
         }
         let paramsMap = new Map();
@@ -1507,9 +1627,9 @@
           for (let k of Object.keys(params)) {
             paramsArr.push(new KeyValue(k, params[k]));
           }
-          connectOut.http.url = paramsMap.get('url');
-          connectOut.http.heads = headsArr;
-          connectOut.http.params = paramsArr;
+          this.connectOut.http.url = paramsMap.get('url');
+          this.connectOut.http.heads = headsArr;
+          this.connectOut.http.params = paramsArr;
         } else if (protocol.type === 2) {
           let headsArr = [];
           let paramsArr = [];
@@ -1521,28 +1641,93 @@
           for (let k of Object.keys(params)) {
             paramsArr.push(new KeyValue(k, params[k]));
           }
-          connectOut.https.url = paramsMap.get('url');
-          connectOut.https.heads = headsArr;
-          connectOut.https.params = paramsArr;
+          this.connectOut.https.url = paramsMap.get('url');
+          this.connectOut.https.heads = headsArr;
+          this.connectOut.https.params = paramsArr;
         } else if (protocol.type === 3) {
-          connectOut.ftp.host = paramsMap.get('host');
-          connectOut.ftp.port = paramsMap.get('port');
-          connectOut.ftp.filePath = paramsMap.get('filePath');
-          connectOut.ftp.fileName = paramsMap.get('fileName');
-          connectOut.ftp.account = paramsMap.get('account');
-          connectOut.ftp.password = paramsMap.get('password');
+          this.connectOut.ftp.host = paramsMap.get('host');
+          this.connectOut.ftp.port = paramsMap.get('port');
+          this.connectOut.ftp.filePath = paramsMap.get('filePath');
+          this.connectOut.ftp.fileName = paramsMap.get('fileName');
+          this.connectOut.ftp.account = paramsMap.get('account');
+          this.connectOut.ftp.password = paramsMap.get('password');
         } else if (protocol.type === 4) {
-          connectOut.sftp.host = paramsMap.get('host');
-          connectOut.sftp.port = paramsMap.get('port');
-          connectOut.sftp.filePath = paramsMap.get('filePath');
-          connectOut.sftp.fileName = paramsMap.get('fileName');
-          connectOut.sftp.account = paramsMap.get('account');
-          connectOut.sftp.password = paramsMap.get('password');
+          this.connectOut.sftp.host = paramsMap.get('host');
+          this.connectOut.sftp.port = paramsMap.get('port');
+          this.connectOut.sftp.filePath = paramsMap.get('filePath');
+          this.connectOut.sftp.fileName = paramsMap.get('fileName');
+          this.connectOut.sftp.account = paramsMap.get('account');
+          this.connectOut.sftp.password = paramsMap.get('password');
         }
         this.connectOutDataChange(protocol.type);
       },
+      buildUpdateMapping(nodeList, map) {
+        if (map == null || map === 'undefined') {
+          map = Object.create(null);
+        }
+        if (nodeList == null || nodeList === 'undefined') {
+          return map;
+        }
+        nodeList.forEach((item) => {
+          map[item.indexKey] = item.inputNode;
+          this.buildUpdateMapping(item.children, map);
+        });
+        return map;
+      },
+      buildNode(itemList, indexKey) {
+        if (itemList == null || itemList === 'undefined') {
+          return null;
+        };
+        if (indexKey == null || indexKey === 'undefined') {
+          indexKey = '';
+        } else {
+          indexKey = indexKey + '#';
+        }
+        let treeList = [];
+        if (itemList.size <= 1) {
+          return null;
+        }
+        itemList.forEach((item) => {
+          let treeNode = new TreeNode();
+          treeNode.id = item.id;
+          treeNode.name = item.name;
+          treeNode.pid = item.fatherId;
+          treeNode.indexKey = indexKey + item.name;
+          treeNode.inputNode = this.mappingMap.get(treeNode.indexKey);
+          treeNode.children = this.buildNode(item.children, indexKey + item.name);
+          treeList.push(treeNode);
+        });
+        return treeList;
+      },
+      buildConnectProtocol(type, connect) {
+        if (type == null || type === 'undefined') {
+            return;
+        }
+        if (connect == null || connect === 'undefined') {
+            return;
+        }
+        let protocol;
+        if (type === 1) {
+          protocol = connect.http;
+        } else if (type === 2) {
+          protocol = connect.https;
+        } else if (type === 3) {
+          protocol = connect.ftp;
+        } else if (type === 4) {
+          protocol = connect.sftp;
+        }
+        let model = {
+          projectId: this.detailForm.id,
+          type: type,
+          connectParamsList: []
+        };
+        for (let k of Object.keys(protocol)) {
+          model.connectParamsList.push(new ConnectParam(k, protocol[k], ''));
+        };
+        return model;
+      },
       loadInputMap(dataNodeList) {
-        if (dataNodeList == null) {
+        if (dataNodeList == null || dataNodeList === 'undefined') {
             return;
         }
         dataNodeList.forEach((item) => {
@@ -1557,6 +1742,11 @@
         this.load(JSON.stringify(model), API_DATA_TREE_INPUT.detail, 'post').then((res) => {
           if (res.errCode === 0) {
             this.inPutDataTree = res.data;
+            this.inPutDataTree.dataNodeList = [{
+                id: 1,
+                name: 'root',
+                children: this.inPutDataTree.dataNodeList
+            }];
             selectInputTable.selectTreeoptions = this.inPutDataTree.dataNodeList;
             this.loadInputMap(this.inPutDataTree.dataNodeList);
             this.loadInputIndexMap(this.inPutDataTree.dataNodeList);
@@ -1580,7 +1770,7 @@
         });
       },
       loadOutputMap(dataNodeList) {
-        if (dataNodeList == null) {
+        if (dataNodeList == null || dataNodeList === 'undefined') {
           return;
         }
         dataNodeList.forEach((item) => {
@@ -1589,7 +1779,7 @@
         });
       },
       loadInputIndexMap(dataNodeList) {
-        if (dataNodeList == null) {
+        if (dataNodeList == null || dataNodeList === 'undefined') {
           return;
         }
         dataNodeList.forEach((item) => {
@@ -1604,6 +1794,11 @@
         this.load(JSON.stringify(model), API_DATA_TREE_OUTPUT.detail, 'post').then((res) => {
           if (res.errCode === 0) {
             this.outPutDataTree = res.data;
+            this.outPutDataTree.dataNodeList = [{
+              id: 1,
+              name: 'root',
+              children: this.outPutDataTree.dataNodeList
+            }];
             this.loadOutputMap(this.outPutDataTree.dataNodeList);
           } else {
           }
@@ -1619,54 +1814,17 @@
             for (let k of Object.keys(res.data.indexMap)) {
               this.mappingMap.set(k, res.data.indexMap[k]);
             };
+            mappingTable.id = res.data.id;
+            this.load(JSON.stringify(model), API_DATA_TREE_OUTPUT.detail, 'post', true).then((res) => {
+              let code = res.errCode;
+              if (code === 0) {
+                mappingTable.tableTreeValue.splice(0, this.table.data.length);
+                mappingTable.tableTreeValue = this.buildNode(res.data.dataNodeList);
+              }
+            });
+          } else {
           }
-          mappingTable.id = res.data.id;
-          this.load(JSON.stringify(model), API_DATA_TREE_OUTPUT.detail, 'post', true).then((res) => {
-            let code = res.errCode;
-            if (code === 0) {
-              mappingTable.tableTreeValue.splice(0, this.table.data.length);
-              mappingTable.tableTreeValue = this.buildNode(res.data.dataNodeList);
-            }
-          });
         });
-      },
-      buildUpdateMapping(nodeList, map) {
-        if (map == null) {
-          map = Object.create(null);
-        }
-        if (nodeList == null) {
-          return map;
-        }
-        nodeList.forEach((item) => {
-          map[item.indexKey] = item.inputNode;
-          this.buildUpdateMapping(item.children, map);
-        });
-        return map;
-      },
-      buildNode(itemList, indexKey) {
-        if (itemList == null) {
-            return null;
-        };
-        if (indexKey == null) {
-            indexKey = '';
-        } else {
-            indexKey = indexKey + '#';
-        }
-        let treeList = [];
-        if (itemList.size <= 1) {
-          return null;
-        }
-        itemList.forEach((item) => {
-          let treeNode = new TreeNode();
-          treeNode.id = item.id;
-          treeNode.name = item.name;
-          treeNode.pid = item.fatherId;
-          treeNode.indexKey = indexKey + item.name;
-          treeNode.inputNode = this.mappingMap.get(treeNode.indexKey);
-          treeNode.children = this.buildNode(item.children, indexKey + item.name);
-          treeList.push(treeNode);
-        });
-        return treeList;
       },
       loadImportRule(currentPage, pageSize) {
         if (currentPage) {
@@ -1701,6 +1859,22 @@
       },
       output_handleNodeClick(data, node, component) {
         this.chooseNode.output = data;
+      },
+      testing() {
+        let model = {
+          projectId: this.detailForm.id,
+          data: this.testingData.inputData
+        };
+        this.load(JSON.stringify(model), API_PROJECT.testing, 'post', true).then((res) => {
+          let code = res.errCode;
+          if (code === 0) {
+            ruleImportTable.data.splice(0, this.table.data.length);
+            res.data.data.forEach(item => {
+              ruleImportTable.data.push(item);
+            });
+            ruleImportTable.total = res.data.totalCount;
+          }
+        });
       }
     },
     created() {
@@ -1723,7 +1897,15 @@
   }
   function ConnectParam(name, value, desc) {
       this.name = name;
-      this.value = value;
+      if (typeof (value) === 'object') {
+        let obj = Object.create(null);
+        for (let k of Object.keys(value)) {
+          obj[value[k].key] = value[k].value;
+        }
+        this.value = obj;
+      } else {
+        this.value = value;
+      }
       this.desc = desc;
   }
 </script>

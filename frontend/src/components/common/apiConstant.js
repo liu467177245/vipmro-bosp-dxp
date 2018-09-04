@@ -1,5 +1,5 @@
 
-const baseApi = 'http://localhost:8081/api';
+const baseApi = 'http://192.168.9.79:8081/api';
 /**
  * 基础api 上传 下载 ...
  * @type {{upload: string, download: string}}
@@ -29,7 +29,8 @@ export const API_PROJECT = {
   delete: `${baseApi}/v1.0.0/project/delete`,
   update: `${baseApi}/v1.0.0/project/update`,
   start: `${baseApi}/v1.0.0/project/start`,
-  stop: `${baseApi}/v1.0.0/project/stop`
+  stop: `${baseApi}/v1.0.0/project/stop`,
+  testing: `${baseApi}/v1.0.0/project/testing`
 };
 export const API_PROJECT_CONNECT_OUT = {
   update: `${baseApi}/v1.0.0/project/connect/out/update`
@@ -55,4 +56,3 @@ export const API_DATA_MAPPING = {
   delete: `${baseApi}/v1.0.0/dataMapper/delete`,
   update: `${baseApi}/v1.0.0/dataMapper/update`
 };
-
