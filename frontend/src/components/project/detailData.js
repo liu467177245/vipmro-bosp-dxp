@@ -24,6 +24,9 @@ export let detail = {
     title: '规则',
     name: 'rule'
   }, {
+    title: '脚本',
+    name: 'script'
+  }, {
     title: '测试',
     name: 'testing'
   }],
@@ -218,6 +221,13 @@ export let select = {
     }, {
       value: 2,
       text: '隐藏身份证'
+    }]
+  },
+  scriptEngineType: {
+    selectValue: 1,
+    selectOptions: [{
+      value: 1,
+      text: 'groovy'
     }]
   }
 };
@@ -444,4 +454,8 @@ export let selectInputTable = {
     value: 'id'
   },
   selectTreeoptions: []
+};
+export let scriptText = {
+  content: '',
+  type: null
 };

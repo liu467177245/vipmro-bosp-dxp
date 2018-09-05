@@ -94,7 +94,7 @@
                     </vipmro-cols>
                     <vipmro-cols>
                       <vipmro-form-item title="自定义参数">
-                        <div class="vipmro-add-html">
+                        <div class="vipmro-add-html" style="width:600px">
                           <vipmro-add-html v-model="detailForm.callBack.postParams" :isLastShowMinus=true>
                             <template slot-scope="props">
                               <vipmro-cols>
@@ -155,7 +155,7 @@
                         <vipmro-cols>
                           <vipmro-form-item title="heads" v-show="connectInShow[0].show">
                             <div class="vipmro-add-html">
-                              <vipmro-add-html v-model="connectIn.http.heads" :isLastShowMinus=true>
+                              <vipmro-add-html style="width: 600px" v-model="connectIn.http.heads" :isLastShowMinus=true>
                                 <template slot-scope="props">
                                   <vipmro-cols>
                                     <vipmro-input v-model="props.item.key" width="444"></vipmro-input>
@@ -170,7 +170,7 @@
                         <vipmro-cols>
                           <vipmro-form-item title="params" v-show="connectInShow[0].show">
                             <div class="vipmro-add-html">
-                              <vipmro-add-html v-model="connectIn.http.params" :isLastShowMinus=true>
+                              <vipmro-add-html style="width: 600px" v-model="connectIn.http.params" :isLastShowMinus=true>
                                 <template slot-scope="props">
                                   <vipmro-cols>
                                     <vipmro-input v-model="props.item.key" width="220"></vipmro-input>
@@ -195,7 +195,7 @@
                         <vipmro-cols>
                           <vipmro-form-item title="heads" v-show="connectInShow[1].show">
                             <div class="vipmro-add-html">
-                              <vipmro-add-html v-model="connectIn.https.heads">
+                              <vipmro-add-html style="width: 600px" v-model="connectIn.https.heads">
                                 <template slot-scope="props">
                                   <vipmro-cols>
                                     <vipmro-input v-model="props.item.key" width="220"></vipmro-input>
@@ -210,7 +210,7 @@
                         <vipmro-cols>
                           <vipmro-form-item title="params" v-show="connectInShow[1].show">
                             <div class="vipmro-add-html">
-                              <vipmro-add-html v-model="connectIn.https.params">
+                              <vipmro-add-html style="width: 600px" v-model="connectIn.https.params">
                                 <template slot-scope="props">
                                   <vipmro-cols>
                                     <vipmro-input v-model="props.item.key" width="220"></vipmro-input>
@@ -357,6 +357,9 @@
                       :width="220"
                     ></vipmro-select>
                   </vipmro-form-item>
+                  <vipmro-button title="导入" :top="5" @click="dataTreeImportShow">
+
+                  </vipmro-button>
                   <div class="webui-button" style="margin-left: 68px">
                     <vipmro-layout-left :width="'500px'" style="border: 1px solid #d8dce5;height: 600px;overflow: scroll;">
                       <VipmroJsonEditor
@@ -498,8 +501,7 @@
               </vipmro-layout-top>
               <vipmro-layout-main>
                 <vipmro-form-validator>
-                <div>
-                  <vipmro-cols>
+                  <vipmro-cols :cols="24">
                     <vipmro-form-item title="协议">
                       <div class="webui-select">
                         <vipmro-select
@@ -513,8 +515,7 @@
                       </div>
                     </vipmro-form-item>
                   </vipmro-cols>
-
-                  <div>
+                  <vipmro-cols :cols="24">
                     <template name="http">
                       <vipmro-cols>
                         <vipmro-form-item title="url" v-show="connectOutShow[0].show">
@@ -525,12 +526,12 @@
                                         :readonly="!saveBtnShow"></vipmro-input>
                         </vipmro-form-item>
                       </vipmro-cols>
-                      <vipmro-cols>
+                      <vipmro-cols :cols="24">
                         <vipmro-form-item title="heads" v-show="connectOutShow[0].show">
                           <div class="vipmro-add-html">
-                            <vipmro-add-html v-model="connectOut.http.heads" :isLastShowMinus=true>
-                              <template slot-scope="props">
-                                <vipmro-cols>
+                            <vipmro-add-html style="width: 600px" v-model="connectOut.http.heads" :isLastShowMinus=true>
+                              <template id="heads" slot-scope="props">
+                                <vipmro-cols :cols="24">
                                   <vipmro-input v-model="props.item.key" width="220"></vipmro-input>
                                   <vipmro-input v-model="props.item.value" width="220"></vipmro-input>
                                 </vipmro-cols>
@@ -542,9 +543,9 @@
                       <vipmro-cols>
                         <vipmro-form-item title="params" v-show="connectOutShow[0].show">
                           <div class="vipmro-add-html">
-                            <vipmro-add-html v-model="connectOut.http.params" :isLastShowMinus=true>
+                            <vipmro-add-html style="width: 600px" v-model="connectOut.http.params" :isLastShowMinus=true>
                               <template slot-scope="props">
-                                <vipmro-cols>
+                                <vipmro-cols :cols="24">
                                   <vipmro-input v-model="props.item.key" width="220"></vipmro-input>
                                   <vipmro-input v-model="props.item.value" width="220"></vipmro-input>
                                 </vipmro-cols>
@@ -554,12 +555,15 @@
                         </vipmro-form-item>
                       </vipmro-cols>
                     </template>
+                  </vipmro-cols>
+
+
                     <template name="https">
                       <vipmro-cols>
                         <vipmro-form-item title="url" v-show="connectOutShow[1].show">
                           <vipmro-input v-model="connectOut.https.url"
                                         :top="2"
-                                        width="220"
+                                        width="440"
                                         :changeBackground="true"
                                         :readonly="!saveBtnShow"></vipmro-input>
                         </vipmro-form-item>
@@ -567,7 +571,7 @@
                       <vipmro-cols>
                         <vipmro-form-item title="heads" v-show="connectOutShow[1].show">
                           <div class="vipmro-add-html">
-                            <vipmro-add-html v-model="connectOut.https.heads">
+                            <vipmro-add-html style="width: 600px" v-model="connectOut.https.heads">
                               <template slot-scope="props">
                                 <vipmro-cols>
                                   <vipmro-input v-model="props.item.key" width="220"></vipmro-input>
@@ -581,7 +585,7 @@
                       <vipmro-cols>
                         <vipmro-form-item title="params" v-show="connectInShow[1].show">
                           <div class="vipmro-add-html">
-                            <vipmro-add-html v-model="connectOut.https.params">
+                            <vipmro-add-html style="width: 600px" v-model="connectOut.https.params">
                               <template slot-scope="props">
                                 <vipmro-cols>
                                   <vipmro-input v-model="props.item.key" width="220"></vipmro-input>
@@ -598,7 +602,7 @@
                         <vipmro-form-item title="url" v-show="connectOutShow[2].show">
                           <vipmro-input v-model="connectOut.ftp.url"
                                         :top="2"
-                                        width="220"
+                                        width="440"
                                         :changeBackground="true"
                                         :readonly="!saveBtnShow"></vipmro-input>
                         </vipmro-form-item>
@@ -607,7 +611,7 @@
                         <vipmro-form-item title="port" v-show="connectOutShow[2].show">
                           <vipmro-input v-model="connectOut.ftp.port"
                                         :top="2"
-                                        width="220"
+                                        width="440"
                                         :changeBackground="true"
                                         :readonly="!saveBtnShow"></vipmro-input>
                         </vipmro-form-item>
@@ -616,7 +620,7 @@
                         <vipmro-form-item title="filePath" v-show="connectOutShow[2].show">
                           <vipmro-input v-model="connectOut.ftp.filePath"
                                         :top="2"
-                                        width="220"
+                                        width="440"
                                         :changeBackground="true"
                                         :readonly="!saveBtnShow"></vipmro-input>
                         </vipmro-form-item>
@@ -625,7 +629,7 @@
                         <vipmro-form-item title="fileName" v-show="connectOutShow[2].show">
                           <vipmro-input v-model="connectOut.ftp.fileName"
                                         :top="2"
-                                        width="220"
+                                        width="440"
                                         :changeBackground="true"
                                         :readonly="!saveBtnShow"></vipmro-input>
                         </vipmro-form-item>
@@ -634,7 +638,7 @@
                         <vipmro-form-item title="account" v-show="connectOutShow[2].show">
                           <vipmro-input v-model="connectOut.ftp.account"
                                         :top="2"
-                                        width="220"
+                                        width="440"
                                         :changeBackground="true"
                                         :readonly="!saveBtnShow"></vipmro-input>
                         </vipmro-form-item>
@@ -643,7 +647,7 @@
                         <vipmro-form-item title="password" v-show="connectOutShow[2].show">
                           <vipmro-input v-model="connectOut.ftp.password"
                                         :top="2"
-                                        width="220"
+                                        width="440"
                                         :changeBackground="true"
                                         :readonly="!saveBtnShow"></vipmro-input>
                         </vipmro-form-item>
@@ -654,7 +658,7 @@
                         <vipmro-form-item title="url" v-show="connectOutShow[3].show">
                           <vipmro-input v-model="connectOut.sftp.url"
                                         :top="2"
-                                        width="220"
+                                        width="440"
                                         :changeBackground="true"
                                         :readonly="!saveBtnShow"></vipmro-input>
                         </vipmro-form-item>
@@ -663,7 +667,7 @@
                         <vipmro-form-item title="port" v-show="connectOutShow[3].show">
                           <vipmro-input v-model="connectOut.sftp.port"
                                         :top="2"
-                                        width="220"
+                                        width="440"
                                         :changeBackground="true"
                                         :readonly="!saveBtnShow"></vipmro-input>
                         </vipmro-form-item>
@@ -672,7 +676,7 @@
                         <vipmro-form-item title="filePath" v-show="connectOutShow[3].show">
                           <vipmro-input v-model="connectOut.sftp.filePath"
                                         :top="2"
-                                        width="220"
+                                        width="440"
                                         :changeBackground="true"
                                         :readonly="!saveBtnShow"></vipmro-input>
                         </vipmro-form-item>
@@ -681,7 +685,7 @@
                         <vipmro-form-item title="fileName" v-show="connectOutShow[3].show">
                           <vipmro-input v-model="connectOut.sftp.fileName"
                                         :top="2"
-                                        width="220"
+                                        width="440"
                                         :changeBackground="true"
                                         :readonly="!saveBtnShow"></vipmro-input>
                         </vipmro-form-item>
@@ -690,7 +694,7 @@
                         <vipmro-form-item title="account" v-show="connectOutShow[3].show">
                           <vipmro-input v-model="connectOut.sftp.account"
                                         :top="2"
-                                        width="220"
+                                        width="440"
                                         :changeBackground="true"
                                         :readonly="!saveBtnShow"></vipmro-input>
                         </vipmro-form-item>
@@ -699,15 +703,14 @@
                         <vipmro-form-item title="password" v-show="connectOutShow[3].show">
                           <vipmro-input v-model="connectOut.sftp.password"
                                         :top="2"
-                                        width="220"
+                                        width="440"
                                         :changeBackground="true"
                                         :readonly="!saveBtnShow"></vipmro-input>
                         </vipmro-form-item>
                       </vipmro-cols>
                     </template>
-                  </div>
 
-                </div>
+
                 </vipmro-form-validator>
               </vipmro-layout-main>
             </template>
@@ -820,35 +823,72 @@
               </vipmro-dialog>
             </template>
 
+            <template slot="script">
+              <vipmro-layout-top>
+                <vipmro-button
+                  top="10"
+                  title="保存"
+                  :readonly="!saveBtnShow"
+                  @click="saveScript">
+                </vipmro-button>
+              </vipmro-layout-top>
+              <vipmro-layout-main>
+                <vipmro-form-validator :value="detailForm">
+                  <vipmro-cols :cols="24">
+                    <vipmro-form-item type="type" title="脚本类型">
+                      <vipmro-select
+                        :options="select.scriptEngineType.selectOptions"
+                        v-model="scriptEngine.type"
+                        :readonly="!saveBtnShow"
+                        :width="220"
+                      ></vipmro-select>
+                    </vipmro-form-item>
+                  </vipmro-cols>
+                  <vipmro-cols :cols="24">
+                    <vipmro-form-item type="content" title="code">
+                      <vipmro-textarea v-model="scriptEngine.content"
+                                       :top="2"
+                                       width="800"
+                                       placeholder=""
+                                       :trimFrontBackSpace="false"
+                                       :trimSpace="false"
+                                       :rows=15
+                                       :changeBackground="true"
+                                       :readonly="!saveBtnShow"></vipmro-textarea>
+                    </vipmro-form-item>
+                  </vipmro-cols>
+                </vipmro-form-validator>
+              </vipmro-layout-main>
+
+            </template>
+
             <template slot="testing">
               <vipmro-layout-top>
-
+                <vipmro-button
+                  top="10"
+                  title="运行"
+                  @click="testing">
+                </vipmro-button>
               </vipmro-layout-top>
-              <vipmro-layout-left width="500">
+              <vipmro-layout-left style="width:100%">
                 <vipmro-textarea v-model="testingData.inputData"
                                  :top="2"
-                                 width="350"
-                                 placeholder="请输入请求数据"
-                                 :rows=30
+                                 width="800"
+                                 placeholder=""
+                                 :rows=15
                                  :changeBackground="true"
                                  :readonly="!saveBtnShow"></vipmro-textarea>
               </vipmro-layout-left>
-              <vipmro-layout-left width="200">
-                <vipmro-button
-                  top="200"
-                  title="开始测试"
-                  @click="testing">
-                </vipmro-button>
+              <vipmro-layout-left width="50">
+
               </vipmro-layout-left>
-              <vipmro-layout-left width="500">
-                <vipmro-textarea v-model="testingData.outputData"
-                                 :top="2"
-                                 width="350"
-                                 placeholder="结果......"
-                                 :rows=30
-                                 :changeBackground="true"
-                                 :readonly="true"></vipmro-textarea>
+              <vipmro-layout-left style="width:100%">
+                <div style="width: 800px;margin-top: 10px">
+                  {{this.testingData.outputData}}
+                </div>
+
               </vipmro-layout-left>
+
             </template>
           </vipmro-tab>
 
@@ -873,15 +913,34 @@
                    @confirm="deleteRule" width="400px" :content="DIALOG_CONTENT">
       {{deleteRuleDialog.text}}
     </vipmro-dialog>
+    <vipmro-dialog
+      v-model="importDataTreeDialog.dialogVisible"
+      @confirm="importDataNodeIn"
+    >
+      <vipmro-layout-main>
+        <vipmro-textarea
+          :width="720"
+          :rows="30"
+          :left="5"
+          :trimHtml="false"
+          :trimSpace="false"
+          :trimFrontBackSpace="false"
+          :top="0"
+          v-model="importDataTreeDialog.importData"
+        ></vipmro-textarea>
+      </vipmro-layout-main>
+    </vipmro-dialog>
   </div>
 </template>
 
 <script type="text/javascript">
-  import {API_PROJECT, API_DATA_TREE_INPUT, API_DATA_RULE, API_DATA_TREE_OUTPUT, API_DATA_MAPPING, API_PROJECT_CONNECT_OUT} from '../common/apiConstant';
+  import {API_PROJECT, API_DATA_TREE_INPUT, API_DATA_RULE, API_DATA_TREE_OUTPUT,
+    API_DATA_MAPPING, API_PROJECT_CONNECT_OUT, API_SCRIPT_ENGINE} from '../common/apiConstant';
   import {button, editHeight, table, dict} from './data';
   import {vText, vNumber} from '../common/validator';
   import {detail, radios, select, connectProtocolIn, connectProtocolOut, inputTree, outputTree, ruleTable, ruleButton,
-    ruleEditHeight, ruleDetailForm, ruleImportTable, mappingTable, selectInputTable} from './detailData';
+    ruleEditHeight, ruleDetailForm, ruleImportTable, mappingTable, selectInputTable, scriptText} from './detailData';
+  import xml2js from 'xml2js';
 
   export default {
     data() {
@@ -897,6 +956,7 @@
         ruleImportTable,
         mappingTable,
         selectInputTable,
+        scriptEngine: JSON.parse(JSON.stringify(scriptText)),
         radios,
         select,
         detail,
@@ -904,6 +964,8 @@
         connectOut: JSON.parse(JSON.stringify(connectProtocolOut)),
         inputTree,
         outputTree,
+        inputDataNodeId: 1,
+        outputDataNodeId: 1,
         chooseNode: {
           input: {
             name: null,
@@ -988,6 +1050,13 @@
           title: '提示',
           iconType: 'warning',
           text: ''
+        },
+        importDataTreeDialog: {
+          dialogVisible: false,
+          title: '提示',
+          iconType: 'warning',
+          text: '',
+          importData: ''
         },
         DIALOG_CONTENT: {
           width: '400px',
@@ -1435,6 +1504,20 @@
           }
         });
       },
+      saveScript() {
+        let model = {
+          projectId: this.detailForm.projectId,
+          content: this.scriptEngine.content,
+          type: this.scriptEngine.type
+        };
+        this.load(JSON.stringify(model), API_SCRIPT_ENGINE.update, 'post').then((res) => {
+          if (res.errCode === 0) {
+            this.$message({type: 'success', message: res.msg, showClose: true});
+          } else {
+            this.$message({type: 'error', message: res.msg, showClose: true});
+          }
+        });
+      },
       callBackChange(obj) {
         if (obj === 1) {
             this.callBackShow = false;
@@ -1787,12 +1870,17 @@
           this.loadInputIndexMap(item.children);
         });
       },
+      loadScriptEngine(scriptEngine) {
+        this.scriptEngine.content = scriptEngine.content;
+        this.scriptEngine.type = scriptEngine.type;
+      },
       loadOutputTree(id) {
         let model = {
           projectId: id
         };
         this.load(JSON.stringify(model), API_DATA_TREE_OUTPUT.detail, 'post').then((res) => {
           if (res.errCode === 0) {
+            this.loadScriptEngine(res.data.scriptEngine);
             this.outPutDataTree = res.data;
             this.outPutDataTree.dataNodeList = [{
               id: 1,
@@ -1850,6 +1938,63 @@
       importRule() {
         ruleImportTable.dialogShow = true;
       },
+      importDataNodeIn() {
+        let jsonObject;
+        if (this.inPutDataTree.dataFormat.type === 1) {
+          try {
+            jsonObject = JSON.parse(this.importDataTreeDialog.importData);
+          } catch (error) {
+            this.$message({type: 'error', message: '解析错误', showClose: true});
+          }
+        } else if (this.inPutDataTree.dataFormat.type === 2) {
+          try {
+            let parser = new xml2js.Parser();
+            parser.parseString(this.importDataTreeDialog.importData, function (err, result) {
+              console.dir(result);
+              console.log('Done');
+              console.log(err);
+              jsonObject = result;
+            });
+          } catch (error) {
+            this.$message({type: 'error', message: '解析错误', showClose: true});
+          }
+        } else {
+          this.$message({type: 'error', message: '暂不支持该格式', showClose: true});
+        }
+        this.inPutDataTree.dataNodeList = [{
+          id: 1,
+          name: 'root',
+          children: this.buildDataNode(jsonObject)
+        }];
+      },
+      /***
+       * object对象转换成dataNode
+       * @param object
+       * @returns {Array}
+       */
+      buildDataNode(object) {
+        let nodeArr = [];
+        for (let k of Object.keys(object)) {
+          this.inputDataNodeId ++;
+          let node = new DataNode();
+          node.id = this.inputDataNodeId;
+          node.name = k;
+          if (typeof (object[k]) === 'object') {
+            if (Object.prototype.toString.call(object[k]) === '[object Array]') {
+              for (let j of Object.keys(object[k])) {
+                if (typeof (object[k][j]) === 'object') {
+                  node.children = this.buildDataNode(object[k][j]);
+                }
+                break;
+              }
+            } else {
+              node.children = this.buildDataNode(object[k]);
+            }
+          }
+          nodeArr.push(node);
+        }
+        return nodeArr;
+      },
       input_handleDragEnd(draggingNode, dropNode, dropType, ev) {
       },
       input_handleNodeClick(data, node, component) {
@@ -1868,13 +2013,14 @@
         this.load(JSON.stringify(model), API_PROJECT.testing, 'post', true).then((res) => {
           let code = res.errCode;
           if (code === 0) {
-            ruleImportTable.data.splice(0, this.table.data.length);
-            res.data.data.forEach(item => {
-              ruleImportTable.data.push(item);
-            });
-            ruleImportTable.total = res.data.totalCount;
+            this.testingData.outputData = res.data;
+          } else {
+            this.$message({type: 'error', message: res.msg, showClose: true});
           }
         });
+      },
+      dataTreeImportShow() {
+        this.importDataTreeDialog.dialogVisible = true;
       }
     },
     created() {
@@ -1894,6 +2040,11 @@
     this.indexKey = indexKey;
     this.children = children;
     this.operate = operate;
+  }
+  function DataNode(id, name, children) {
+    this.id = id;
+    this.name = name;
+    this.children = children;
   }
   function ConnectParam(name, value, desc) {
       this.name = name;

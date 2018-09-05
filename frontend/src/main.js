@@ -8,7 +8,6 @@ import Index from '@/components/index/index';
 import DataRule from '@/components/dataRule/index';
 import Project from '@/components/project/index';
 import LogRequest from '@/components/logRequest/index';
-import Testing from '@/components/testing/index';
 
 // import Select from '@/components/select/index';
 
@@ -43,11 +42,6 @@ const router = new Router({
       path: '/logRequest',
       name: 'list',
       component: LogRequest
-    },
-    {
-      path: '/Testing',
-      name: 'testing',
-      component: Testing
     }
   ]
 });
