@@ -369,6 +369,7 @@
                         :forbitDrag="inputTree.forbitDrag"
                         :forbitDrop="inputTree.forbitDrop"
                         :defaultExpandedKeys="inputTree.defaultExpandedKeys"
+                        :expandAll="true"
                         @dragEnd="input_handleDragEnd"
                         @nodeClick="input_handleNodeClick"
                       ></VipmroJsonEditor>
@@ -425,6 +426,7 @@
                         :forbitDrag="outputTree.forbitDrag"
                         :forbitDrop="outputTree.forbitDrop"
                         :defaultExpandedKeys="outputTree.defaultExpandedKeys"
+                        :expandAll="true"
                         @dragEnd="output_handleDragEnd"
                         @nodeClick="output_handleNodeClick"
                       ></VipmroJsonEditor>
@@ -478,6 +480,7 @@
                 <vipmro-tabletree
                   v-model="mappingTable.tableTreeValue"
                   :tabletreeHeader="mappingTable.tableTreeHeader"
+                  :openAll="true"
                   @clickRow="selectInputMapping"
                 ></vipmro-tabletree>
               </vipmro-layout-left>
@@ -1125,8 +1128,11 @@
             this.detailForm.name = res.data.name;
             this.detailForm.describe = res.data.describe;
             this.detailForm.obtainDataType = res.data.obtainDataType;
-            this.detailForm.needSynBack = res.data.needSynBack;
-            this.detailForm.dataMapperId = res.data.dataMapperId;
+            if (res.data.needSynBack === true) {
+              this.detailForm.needSynBack = 1;
+            } else {
+              this.detailForm.needSynBack = 2;
+            }
             if (res.data.taskFrequency == null || res.data.taskFrequency === 'undefined') {
             } else {
               this.detailForm.taskFrequency = res.data.taskFrequency;
@@ -1135,7 +1141,11 @@
             } else {
               this.detailForm.callBack = res.data.callBack;
             }
-            this.detailForm.inputProtocol = res.data.inputProtocol;
+            this.detailForm.dataMapperId = res.data.dataMapperId;
+            if (res.data.inputProtocol == null || res.data.inputProtocol === 'undefined') {
+            } else {
+              this.detailForm.inputProtocol = res.data.inputProtocol;
+            }
             if (res.data.outputProtocol == null || res.data.outputProtocol === 'undefined') {
             } else {
               this.detailForm.outputProtocol = res.data.outputProtocol;
@@ -1148,6 +1158,12 @@
             this.loadOutputTree(this.detailForm.id);
             this.loadMapping(this.detailForm.id);
             this.loadDataRule(this.detailForm.id);
+            /****
+             *
+             * @type {*}
+             *
+
+             */
           } else {
             this.$message({type: 'error', message: res.msg, showClose: true});
           }
@@ -1418,6 +1434,7 @@
               type: this.inPutDataTree.dataFormat.type
           }
         };
+        console.log();
         let address;
         if (this.inPutDataTree.id == null || this.inPutDataTree.id === 'undefined') {
             address = API_DATA_TREE_INPUT.add;
@@ -2026,7 +2043,6 @@
           children: this.buildDataNode(jsonObject)
         }];
       },
-
       /***
        * object对象转换成dataNode
        * @param object
