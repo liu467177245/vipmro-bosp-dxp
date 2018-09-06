@@ -357,7 +357,7 @@
                       :width="220"
                     ></vipmro-select>
                   </vipmro-form-item>
-                  <vipmro-button title="导入" :top="5" @click="dataTreeImportShow">
+                  <vipmro-button title="导入" :top="5" @click="dataTreeInputImportShow">
 
                   </vipmro-button>
                   <div class="webui-button" style="margin-left: 68px">
@@ -414,6 +414,8 @@
                       :width="220"
                     ></vipmro-select>
                   </vipmro-form-item>
+                  <vipmro-button title="导入" :top="5" @click="dataTreeOutputImportShow">
+                  </vipmro-button>
                   <div class="webui-button" style="margin-left: 68px">
                     <vipmro-layout-left :width="'500px'" style="border: 1px solid #d8dce5;height: 600px;overflow: scroll;">
                       <VipmroJsonEditor
@@ -914,7 +916,7 @@
       {{deleteRuleDialog.text}}
     </vipmro-dialog>
     <vipmro-dialog
-      v-model="importDataTreeDialog.dialogVisible"
+      v-model="importInputDataTreeDialog.dialogVisible"
       @confirm="importDataNodeIn"
     >
       <vipmro-layout-main>
@@ -926,7 +928,24 @@
           :trimSpace="false"
           :trimFrontBackSpace="false"
           :top="0"
-          v-model="importDataTreeDialog.importData"
+          v-model="importInputDataTreeDialog.importData"
+        ></vipmro-textarea>
+      </vipmro-layout-main>
+    </vipmro-dialog>
+    <vipmro-dialog
+      v-model="importOutputDataTreeDialog.dialogVisible"
+      @confirm="importDataNodeOut"
+    >
+      <vipmro-layout-main>
+        <vipmro-textarea
+          :width="720"
+          :rows="30"
+          :left="5"
+          :trimHtml="false"
+          :trimSpace="false"
+          :trimFrontBackSpace="false"
+          :top="0"
+          v-model="importOutputDataTreeDialog.importData"
         ></vipmro-textarea>
       </vipmro-layout-main>
     </vipmro-dialog>
@@ -1051,7 +1070,14 @@
           iconType: 'warning',
           text: ''
         },
-        importDataTreeDialog: {
+        importInputDataTreeDialog: {
+          dialogVisible: false,
+          title: '提示',
+          iconType: 'warning',
+          text: '',
+          importData: ''
+        },
+        importOutputDataTreeDialog: {
           dialogVisible: false,
           title: '提示',
           iconType: 'warning',
@@ -1942,18 +1968,20 @@
         let jsonObject;
         if (this.inPutDataTree.dataFormat.type === 1) {
           try {
-            jsonObject = JSON.parse(this.importDataTreeDialog.importData);
+            jsonObject = JSON.parse(this.importInputDataTreeDialog.importData);
+            this.$message({type: 'success', message: '解析成功', showClose: true});
           } catch (error) {
             this.$message({type: 'error', message: '解析错误', showClose: true});
           }
         } else if (this.inPutDataTree.dataFormat.type === 2) {
           try {
             let parser = new xml2js.Parser();
-            parser.parseString(this.importDataTreeDialog.importData, function (err, result) {
-              console.dir(result);
-              console.log('Done');
-              console.log(err);
+            parser.parseString(this.importInputDataTreeDialog.importData, function (err, result) {
               jsonObject = result;
+              if (err === null) {
+              } else {
+                this.$message({type: 'error', message: '解析错误', showClose: true});
+              }
             });
           } catch (error) {
             this.$message({type: 'error', message: '解析错误', showClose: true});
@@ -1967,6 +1995,38 @@
           children: this.buildDataNode(jsonObject)
         }];
       },
+      importDataNodeOut() {
+        let jsonObject;
+        if (this.outPutDataTree.dataFormat.type === 1) {
+          try {
+            jsonObject = JSON.parse(this.importOutputDataTreeDialog.importData);
+            this.$message({type: 'success', message: '解析成功', showClose: true});
+          } catch (error) {
+            this.$message({type: 'error', message: '解析错误', showClose: true});
+          }
+        } else if (this.outPutDataTree.dataFormat.type === 2) {
+          try {
+            let parser = new xml2js.Parser();
+            parser.parseString(this.importOutputDataTreeDialog.importData, function (err, result) {
+              jsonObject = result;
+              if (err === null) {
+              } else {
+                this.$message({type: 'error', message: '解析错误', showClose: true});
+              }
+            });
+          } catch (error) {
+            this.$message({type: 'error', message: '解析错误', showClose: true});
+          }
+        } else {
+          this.$message({type: 'error', message: '暂不支持该格式', showClose: true});
+        }
+        this.outPutDataTree.dataNodeList = [{
+          id: 1,
+          name: 'root',
+          children: this.buildDataNode(jsonObject)
+        }];
+      },
+
       /***
        * object对象转换成dataNode
        * @param object
@@ -1974,6 +2034,12 @@
        */
       buildDataNode(object) {
         let nodeArr = [];
+        if (Object.prototype.toString.call(object) === '[object Array]') {
+          for (let k of Object.keys(object)) {
+            object = object[k];
+            break;
+          }
+        }
         for (let k of Object.keys(object)) {
           this.inputDataNodeId ++;
           let node = new DataNode();
@@ -1987,9 +2053,15 @@
                 }
                 break;
               }
+              node.dataType = 9;
             } else {
               node.children = this.buildDataNode(object[k]);
+              node.dataType = 4;
             }
+          } else if (typeof (object[k]) === 'string') {
+              node.dataType = 2;
+          } else if (typeof (object[k]) === 'number') {
+              node.dataType = 1;
           }
           nodeArr.push(node);
         }
@@ -2019,8 +2091,11 @@
           }
         });
       },
-      dataTreeImportShow() {
-        this.importDataTreeDialog.dialogVisible = true;
+      dataTreeInputImportShow() {
+        this.importInputDataTreeDialog.dialogVisible = true;
+      },
+      dataTreeOutputImportShow() {
+        this.importOutputDataTreeDialog.dialogVisible = true;
       }
     },
     created() {
