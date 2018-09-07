@@ -448,21 +448,35 @@
                           ></vipmro-select>
                         </vipmro-form-item>
                       </vipmro-cols>
-                      <vipmro-cols>
-                        <vipmro-form-item type="paramFilteType" title="过滤类型">
-                          <vipmro-select
-                            :options="select.filterType.selectOptions"
-                            v-model="chooseNode.output.filterType"
-                            :readonly="!saveBtnShow"
-                            :width="220"
-                          ></vipmro-select>
-                        </vipmro-form-item>
-                      </vipmro-cols>
+
                       <vipmro-cols>
                         <vipmro-form-item type="paramName" title="默认值">
                           <vipmro-input v-model="chooseNode.output.defaultValue" :top="2" width="220"
                                         :readonly="!saveBtnShow"></vipmro-input>
                         </vipmro-form-item>
+                      </vipmro-cols>
+                      <vipmro-cols>
+                        <vipmro-form-item type="paramFilteType" title="过滤类型">
+                          <vipmro-select
+                            :options="select.filterType.selectOptions"
+                            v-model="chooseNode.output.dataFilter.filterType"
+                            :readonly="!saveBtnShow"
+                            :width="220"
+                          ></vipmro-select>
+                        </vipmro-form-item>
+                        <vipmro-cols>
+                          <vipmro-form-item type="subStringIndex" title="起始"  v-show="chooseNode.output.dataFilter.filterType === 3">
+                            <vipmro-input v-model="chooseNode.dataFilterSelect.subString.params.beginIndex" :top="2" width="108"
+                                          :readonly="!saveBtnShow"
+                                          placeholder="截取起点"
+                            ></vipmro-input>
+                            <vipmro-input v-model="chooseNode.dataFilterSelect.subString.params.endIndex" :top="2" width="108"
+                                          :readonly="!saveBtnShow"
+                                          placeholder="截取终点"
+                            ></vipmro-input>
+                          </vipmro-form-item>
+
+                        </vipmro-cols>
                       </vipmro-cols>
                     </vipmro-layout-left>
                   </div>
@@ -998,8 +1012,20 @@
             name: null,
             id: null,
             dataType: null,
-            filterType: null,
+            dataFilter: {
+              filterType: null,
+              params: {
+              }
+            },
             defaultValue: ''
+          },
+          dataFilterSelect: {
+            subString: {
+              params: {
+                beginIndex: null,
+                endIndex: null
+              }
+            }
           }
         },
         connectInShow: [{
@@ -2091,7 +2117,18 @@
       output_handleDragEnd(draggingNode, dropNode, dropType, ev) {
       },
       output_handleNodeClick(data, node, component) {
-        this.chooseNode.output = data;
+        if (data.dataFilter.filterType === 3) {
+          this.chooseNode.output = data;
+          if (data.dataFilter.params == null) {
+            this.chooseNode.dataFilterSelect.subString.params = JSON.parse(JSON.stringify(this.chooseNode.dataFilterSelect.subString.params));
+          } else {
+            this.chooseNode.dataFilterSelect.subString.params = data.dataFilter.params;
+          }
+        } else {
+          this.chooseNode.dataFilterSelect.subString.params = JSON.parse(JSON.stringify(this.chooseNode.dataFilterSelect.subString.params));
+          this.chooseNode.output = data;
+        }
+        console.log();
       },
       testing() {
         let model = {

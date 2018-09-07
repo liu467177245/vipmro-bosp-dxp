@@ -221,6 +221,9 @@ export let select = {
     }, {
       value: 2,
       text: '隐藏身份证'
+    }, {
+      value: 3,
+      text: '截取'
     }]
   },
   scriptEngineType: {
@@ -311,7 +314,13 @@ export let outputTree = {
   /* 拖拽不允许放置的节点 */
   forbitDrop: [],
   /* 默认展开的节点 */
-  defaultExpandedKeys: []
+  defaultExpandedKeys: [],
+  dataFilterParam: {
+    subString: {
+      beginIndex: null,
+      endIndex: null
+    }
+  }
 };
 export let ruleTable = {
   position: 'list',
