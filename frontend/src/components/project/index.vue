@@ -1546,6 +1546,7 @@
           if (res.errCode === 0) {
             this.$message({type: 'success', message: res.msg, showClose: true});
             this.loadDataRule();
+            this.rule.form.id = res.data;
             ruleTable.position = 'list';
           } else {
             this.$message({type: 'error', message: res.msg, showClose: true});

@@ -161,25 +161,28 @@ export let select = {
     }]
   },
   rangeType: {
-    selectValue: 0,
+    selectValue: 1,
     selectOptions: [{
-      value: 0,
+      value: 1,
       text: '='
     }, {
-      value: 1,
+      value: 2,
       text: '>='
     }, {
-      value: 2,
+      value: 3,
       text: '>'
     }, {
-      value: 3,
+      value: 4,
       text: '<='
     }, {
-      value: 4,
+      value: 5,
       text: '<'
     }, {
-      value: 5,
+      value: 6,
       text: '<>'
+    }, {
+      value: 7,
+      text: '包含'
     }]
   },
   nodeType: {
