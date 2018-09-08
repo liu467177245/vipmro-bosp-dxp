@@ -33,12 +33,12 @@
         </vipmro-layout-top>
         <vipmro-layout-main :height="editHeight">
           <template slot-scope="props">
-            <vipmro-form-validator :value="form" ref="validatorForm">
+            <vipmro-form-validator>
 
               <VipmroCols :cols="12">
                 <vipmro-form-item type="name" title="规则名称" :validator="vText(30)"
                                   :validatorType="!saveBtnShow">
-                  <vipmro-input v-model="form.name" :top="2" width="220"
+                  <vipmro-input v-model="dataDetailForm.name" :top="2" width="220"
                                 :readonly="!saveBtnShow"></vipmro-input>
                 </vipmro-form-item>
               </VipmroCols>
@@ -47,7 +47,7 @@
               <template>
                 <div class="vipmro-add-html">
                   <vipmro-add-html
-                    v-model="form.conditionFiledList"
+                    v-model="dataDetailForm.conditionFiledList"
                     :isLastShowMinus="true"
                   >
                     <template slot-scope="props">
@@ -75,20 +75,51 @@
               <template>
                 <div class="vipmro-add-html">
                   <vipmro-add-html
-                    v-model="form.targetFiledList"
+                    v-model="dataDetailForm.targetFiledList"
                     :isLastShowMinus="true"
                   >
                     <template slot-scope="props">
                       <VipmroCols :cols="24">
-                        <vipmro-form-item type="name" title="字段名" :validator="vText(30)" :validatorType="!saveBtnShow">
-                          <vipmro-input v-model="props.item.filedName" :top="2" width="220"
-                                        :readonly="!saveBtnShow"></vipmro-input>
+                        <vipmro-form-item type="name" title="类型" :validator="vText(30)" :validatorType="!saveBtnShow">
+                          <vipmro-select
+                            :top="2"
+                            :options="select.targetFileType.selectOptions"
+                            v-model="props.item.type"
+                            :readonly="!saveBtnShow"
+                            :width="120"
+                          ></vipmro-select>
                         </vipmro-form-item>
-                        <vipmro-form-item type="name" title="值" :validator="vText(30)" :validatorType="!saveBtnShow">
-                          <vipmro-input v-model="props.item.value" :top="2" width="220"
+                        <vipmro-form-item type="name" title="目标字段" :validator="vText(30)" :validatorType="!saveBtnShow">
+                          <vipmro-input v-model="props.item.filedName" :top="2" width="320"
                                         :readonly="!saveBtnShow"></vipmro-input>
                         </vipmro-form-item>
                       </VipmroCols>
+                      <vipmro-cols v-show="props.item.type !== 2">
+                        <vipmro-form-item   style="margin-left: 274px" type="name" title="值" :validator="vText(30)" :validatorType="!saveBtnShow">
+                          <vipmro-input v-model="props.item.replaceValue" :top="2" width="320"
+                                        :readonly="!saveBtnShow"></vipmro-input>
+
+                        </vipmro-form-item>
+                      </vipmro-cols>
+
+                      <vipmro-cols >
+                        <vipmro-add-html
+                          v-show="props.item.type === 2"
+                          v-model="props.item.splicValueArr"
+                          style="width: 1000px"
+                        >
+                          <template slot-scope="valueItem">
+                            <vipmro-cols>
+                              <vipmro-form-item   style="margin-left: 274px" type="name" title="拼接字段" :validator="vText(30)" :validatorType="!saveBtnShow">
+                                <vipmro-input v-model="valueItem.item.value" :top="2" width="320"
+                                              :readonly="!saveBtnShow"></vipmro-input>
+                              </vipmro-form-item>
+                            </vipmro-cols>
+                          </template>
+                        </vipmro-add-html>
+                      </vipmro-cols>
+
+
                     </template>
                   </vipmro-add-html>
                 </div>
@@ -110,7 +141,7 @@
 
 <script type="text/javascript">
   import {API_DATA_RULE} from '../common/apiConstant';
-  import {button, editHeight, table, detailForm, dataDicts} from './data';
+  import {button, editHeight, table, detailForm, dataDicts, select} from './data';
   import {vText, vNumber} from '../common/validator';
 
   export default {
@@ -121,9 +152,10 @@
         editHeight,
         detailForm,
         dataDicts,
+        select,
         pagingPage: 1,
         saveBtnShow: false,
-        form: JSON.parse(JSON.stringify(detailForm)),
+        dataDetailForm: JSON.parse(JSON.stringify(detailForm)),
         detailDialog: {
           dialogVisible: false,
           title: '提示',
@@ -147,16 +179,17 @@
         this.table.position = 'detail';
         this.$refs.validatorForm.reset();
         this.saveBtnShow = true;
-        this.form = JSON.parse(JSON.stringify(detailForm));
+        this.dataDetailForm = JSON.parse(JSON.stringify(detailForm));
       },
       save() {
           let apiAddress = null;
-          if (this.form.id != null) {
+          if (this.dataDetailForm.id != null) {
             apiAddress = API_DATA_RULE.update;
           } else {
             apiAddress = API_DATA_RULE.add;
           }
-          this.load(JSON.stringify(this.form), apiAddress, 'post').then((res) => {
+          console.log(this.dataDetailForm);
+          this.load(JSON.stringify(this.dataDetailForm), apiAddress, 'post').then((res) => {
             if (res.errCode === 0) {
               this.$message({type: 'success', message: res.msg, showClose: true});
               this.search();
@@ -230,7 +263,8 @@
         };
       },
       dblClickRow(obj) {
-        this.form = obj;
+        this.dataDetailForm = obj;
+        console.log(this.dataDetailForm);
         table.position = 'detail';
         this.saveBtnShow = true;
       }

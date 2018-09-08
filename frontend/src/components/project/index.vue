@@ -761,11 +761,11 @@
                   </vipmro-layout-top>
                   <vipmro-layout-main :height="ruleEditHeight">
                     <template slot-scope="props">
-                      <vipmro-form-validator :value="rule.form" ref="validatorForm">
+                      <vipmro-form-validator :value="rule.dataDetailForm" ref="validatorForm">
                         <VipmroCols :cols="12">
                           <vipmro-form-item type="rule_name" title="规则名称" :validator="vText(30)"
                                             :validatorType="!rule.saveBtnShow">
-                            <vipmro-input v-model="rule.form.name" :top="2" width="220"
+                            <vipmro-input v-model="rule.dataDetailForm.name" :top="2" width="220"
                                           :readonly="!rule.ruleSaveBtnShow"></vipmro-input>
                           </vipmro-form-item>
                         </VipmroCols>
@@ -774,7 +774,7 @@
                         <template>
                           <div class="vipmro-add-html">
                             <vipmro-add-html
-                              v-model="rule.form.conditionFiledList"
+                              v-model="rule.dataDetailForm.conditionFiledList"
                               :isLastShowMinus="true"
                             >
                               <template slot-scope="props">
@@ -801,7 +801,7 @@
                         <template>
                           <div class="vipmro-add-html">
                             <vipmro-add-html
-                              v-model="rule.form.targetFiledList"
+                              v-model="rule.dataDetailForm.targetFiledList"
                               :isLastShowMinus="true"
                             >
                               <template slot-scope="props">
@@ -1073,7 +1073,7 @@
         },
         rule: {
           ruleSaveBtnShow: false,
-          form: JSON.parse(JSON.stringify(ruleDetailForm))
+          dataDetailForm: JSON.parse(JSON.stringify(ruleDetailForm))
         },
         detailDialog: {
           dialogVisible: false,
@@ -1197,7 +1197,7 @@
         ruleTable.position = 'list';
       },
       dblClickRow_rule(obj) {
-        this.rule.form = obj;
+        this.rule.dataDetailForm = obj;
         ruleTable.position = 'detail';
         this.rule.ruleSaveBtnShow = true;
       },
@@ -1388,7 +1388,7 @@
       addRule() {
         this.ruleTable.position = 'detail';
         this.rule.ruleSaveBtnShow = true;
-        this.rule.form = JSON.parse(JSON.stringify(ruleDetailForm));
+        this.rule.dataDetailForm = JSON.parse(JSON.stringify(ruleDetailForm));
       },
       delRule() {
         this.openRuleBatch(-1, '确定删除所选数据？');
@@ -1536,17 +1536,17 @@
       },
       saveRule() {
         let apiAddress = null;
-        if (this.rule.form.id != null) {
+        if (this.rule.dataDetailForm.id != null) {
           apiAddress = API_DATA_RULE.update;
         } else {
           apiAddress = API_DATA_RULE.add;
         }
-        this.rule.form.projectId = this.detailForm.id;
-        this.load(JSON.stringify(this.rule.form), apiAddress, 'post').then((res) => {
+        this.rule.dataDetailForm.projectId = this.detailForm.id;
+        this.load(JSON.stringify(this.rule.dataDetailForm), apiAddress, 'post').then((res) => {
           if (res.errCode === 0) {
             this.$message({type: 'success', message: res.msg, showClose: true});
             this.loadDataRule();
-            this.rule.form.id = res.data;
+            this.rule.dataDetailForm.id = res.data;
             ruleTable.position = 'list';
           } else {
             this.$message({type: 'error', message: res.msg, showClose: true});

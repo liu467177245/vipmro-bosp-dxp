@@ -3,23 +3,26 @@ import {buttonName} from '../common/constant';
 export let dataDicts = [{
   nameKey: 'rangeType',
   dictItems: [{
-    value: 0,
+    value: 1,
     text: '='
   }, {
-    value: 1,
+    value: 2,
     text: '>='
   }, {
-    value: 2,
+    value: 3,
     text: '>'
   }, {
-    value: 3,
+    value: 4,
     text: '<='
   }, {
-    value: 4,
+    value: 5,
     text: '<'
   }, {
-    value: 5,
+    value: 6,
     text: '<>'
+  }, {
+    value: 7,
+    text: '包含'
   }]
 }];
 export let table = {
@@ -96,4 +99,16 @@ export let editHeight = {
   top: 0,
   bottom: 0,
   detailHeight: 0
+};
+export let select = {
+  targetFileType: {
+    selectValue: 1,
+    selectOptions: [{
+      value: 1,
+      text: '替换'
+    }, {
+      value: 2,
+      text: '字段拼接'
+    }]
+  }
 };
