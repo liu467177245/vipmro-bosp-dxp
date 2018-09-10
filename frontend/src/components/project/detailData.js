@@ -235,6 +235,16 @@ export let select = {
       value: 1,
       text: 'groovy'
     }]
+  },
+  targetFileType: {
+    selectValue: 1,
+    selectOptions: [{
+      value: 1,
+      text: '替换'
+    }, {
+      value: 2,
+      text: '字段拼接'
+    }]
   }
 };
 export let connectProtocolIn = {

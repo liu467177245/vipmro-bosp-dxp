@@ -806,15 +806,44 @@
                             >
                               <template slot-scope="props">
                                 <VipmroCols :cols="24">
-                                  <vipmro-form-item type="target_name" title="字段名">
+                                  <vipmro-form-item type="name" title="类型" :validator="vText(30)" :validatorType="!saveBtnShow">
+                                    <vipmro-select
+                                      :top="2"
+                                      :options="select.targetFileType.selectOptions"
+                                      v-model="props.item.type"
+                                      :readonly="!saveBtnShow"
+                                      :width="120"
+                                    ></vipmro-select>
+                                  </vipmro-form-item>
+                                  <vipmro-form-item type="target_name" title="目标字段">
                                     <vipmro-input v-model="props.item.filedName" :top="2" width="220"
                                                   :readonly="!rule.ruleSaveBtnShow"></vipmro-input>
                                   </vipmro-form-item>
-                                  <vipmro-form-item type="target_value" title="值">
-                                    <vipmro-input v-model="props.item.value" :top="2" width="220"
+                                </VipmroCols>
+                                <vipmroCols v-show="props.item.type !== 2">
+                                  <vipmro-form-item type="target_value" title="值" style="margin-left: 274px">
+                                    <vipmro-input v-model="props.item.replaceValue" :top="2" width="220"
                                                   :readonly="!rule.ruleSaveBtnShow"></vipmro-input>
                                   </vipmro-form-item>
-                                </VipmroCols>
+                                </vipmroCols>
+
+                                <vipmro-cols >
+                                  <vipmro-add-html
+                                    v-show="props.item.type === 2"
+                                    v-model="props.item.splicValueArr"
+                                    style="width: 1000px"
+                                  >
+                                    <template slot-scope="valueItem">
+                                      <vipmro-cols>
+                                        <vipmro-form-item   style="margin-left: 274px" type="name" title="拼接字段" :validator="vText(30)" :validatorType="!saveBtnShow">
+                                          <vipmro-input v-model="valueItem.item.value" :top="2" width="320"
+                                                        :readonly="!saveBtnShow"></vipmro-input>
+                                        </vipmro-form-item>
+                                      </vipmro-cols>
+                                    </template>
+                                  </vipmro-add-html>
+                                </vipmro-cols>
+
                               </template>
                             </vipmro-add-html>
                           </div>

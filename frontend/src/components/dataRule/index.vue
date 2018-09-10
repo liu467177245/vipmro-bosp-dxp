@@ -264,7 +264,6 @@
       },
       dblClickRow(obj) {
         this.dataDetailForm = obj;
-        console.log(this.dataDetailForm);
         table.position = 'detail';
         this.saveBtnShow = true;
       }
