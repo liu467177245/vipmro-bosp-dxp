@@ -52,11 +52,15 @@
                   >
                     <template slot-scope="props">
                       <VipmroCols :cols="24">
-                        <vipmro-form-item type="name" title="字段名" :validator="vText(30)"
+
+                        <vipmro-form-item type="name" title="条件字段" :validator="vText(30)"
                                           :validatorType="!saveBtnShow">
+                          <vipmro-select :options="dataDicts[2].dictItems" v-model="props.item.leftExtend" :top="2" width="100"
+                                         :readonly="!saveBtnShow"></vipmro-select>
                           <vipmro-input v-model="props.item.filedName" :top="2" width="220"
                                         :readonly="!saveBtnShow"></vipmro-input>
                         </vipmro-form-item>
+
                         <vipmro-select :options="dataDicts[0].dictItems" v-model="props.item.rangeType" :top="2" width="100"
                                        :readonly="!saveBtnShow"></vipmro-select>
                         <vipmro-input v-model="props.item.startValue" :top="2" width="220"
@@ -65,6 +69,12 @@
                                       :readonly="!saveBtnShow" v-show="props.item.rangeType === 5"></vipmro-input>
                         <vipmro-input v-model="props.item.value" :top="2" width="220"
                                       :readonly="!saveBtnShow" v-show="props.item.rangeType !== 5"></vipmro-input>
+
+                        <vipmro-select :options="dataDicts[3].dictItems" v-model="props.item.rightExtend" :top="2" width="100"
+                                       :readonly="!saveBtnShow"></vipmro-select>
+                        <vipmro-select :options="dataDicts[1].dictItems" v-model="props.item.logicType" :top="2" width="100"
+                                       :readonly="!saveBtnShow"></vipmro-select>
+
                       </VipmroCols>
                     </template>
                   </vipmro-add-html>

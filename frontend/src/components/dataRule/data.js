@@ -24,6 +24,33 @@ export let dataDicts = [{
     value: 7,
     text: '包含'
   }]
+}, {
+  nameKey: 'logicType',
+  dictItems: [{
+    value: 1,
+    text: 'and'
+  }, {
+    value: 2,
+    text: 'or'
+  }]
+}, {
+  nameKey: 'leftExtend',
+  dictItems: [{
+    value: null,
+    text: ''
+  }, {
+    value: 2,
+    text: '('
+  }]
+}, {
+  nameKey: 'rightExtend',
+  dictItems: [{
+    value: null,
+    text: ''
+  }, {
+    value: 2,
+    text: ')'
+  }]
 }];
 export let table = {
   position: 'list',
