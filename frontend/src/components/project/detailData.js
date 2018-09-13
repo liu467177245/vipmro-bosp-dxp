@@ -457,7 +457,7 @@ export let mappingTable = {
   id: null,
   chooseId: null,
   tableTreeHeader: [{
-    name: '输出格式',
+    name: '输入格式',
     width: '375',
     nameKey: 'name',
     isTree: true
@@ -465,6 +465,17 @@ export let mappingTable = {
     name: '映射',
     width: '300',
     nameKey: 'inputNode'
+  }],
+  tableTreeValue: []
+};
+export let mappingTableOut = {
+  id: null,
+  chooseId: null,
+  tableTreeHeader: [{
+    name: '输出格式',
+    width: '375',
+    nameKey: 'name',
+    isTree: true
   }],
   tableTreeValue: []
 };

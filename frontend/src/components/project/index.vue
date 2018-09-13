@@ -490,7 +490,9 @@
                   <vipmro-button :title="'保存'" @click="saveMapping" :disabled="!saveBtnShow"></vipmro-button>
                 </vipmro-operation-button>
               </vipmro-layout-top>
-              <vipmro-layout-left width="800px">
+
+
+              <vipmro-layout-left width="675.5px">
                 <vipmro-tabletree
                   v-model="mappingTable.tableTreeValue"
                   :tabletreeHeader="mappingTable.tableTreeHeader"
@@ -498,16 +500,13 @@
                   @clickRow="selectInputMapping"
                 ></vipmro-tabletree>
               </vipmro-layout-left>
-              <vipmro-layout-left>
-                <vipmro-cascader
-                  v-model="selectInputTable.selectTreeValue"
-                  :options="selectInputTable.selectTreeoptions"
-                  :props="selectInputTable.props"
-                  :changeOnSelect="true"
-                  :width="300"
-                  :readonly="!saveBtnShow"
-                  @change="changeInputSelectNode"
-                ></vipmro-cascader>
+              <vipmro-layout-left width="800px">
+                <vipmro-tabletree
+                  v-model="mappingTableOut.tableTreeValue"
+                  :tabletreeHeader="mappingTableOut.tableTreeHeader"
+                  :openAll="true"
+                  @clickRow="changeInputSelectNodeTree"
+                ></vipmro-tabletree>
               </vipmro-layout-left>
 
             </template>
@@ -1004,7 +1003,7 @@
   import {button, editHeight, table, dict} from './data';
   import {vText, vNumber} from '../common/validator';
   import {detail, radios, select, connectProtocolIn, connectProtocolOut, inputTree, outputTree, ruleTable, ruleButton,
-    ruleEditHeight, ruleDetailForm, ruleImportTable, mappingTable, selectInputTable, scriptText} from './detailData';
+    ruleEditHeight, ruleDetailForm, ruleImportTable, mappingTable, mappingTableOut, selectInputTable, scriptText} from './detailData';
   import xml2js from 'xml2js';
 
   export default {
@@ -1020,6 +1019,7 @@
         ruleDetailForm,
         ruleImportTable,
         mappingTable,
+        mappingTableOut,
         selectInputTable,
         scriptEngine: JSON.parse(JSON.stringify(scriptText)),
         radios,
@@ -1697,9 +1697,35 @@
           }
         }
       },
+      findMappingNodeIn(id, nodeList) {
+        if (id == null || id === 'undefined') {
+          return;
+        }
+        if (nodeList == null || nodeList === 'undefined') {
+          return;
+        }
+        let result;
+        for (let k = 0; k < nodeList.length; k++) {
+          let node = nodeList[k];
+          if (id === node.id) {
+            return node;
+          }
+          if (node.children != null) {
+            result = this.findMappingNodeIn(id, node.children);
+          }
+          if (result != null) {
+            return result;
+          }
+        }
+      },
       changeInputSelectNode(obj) {
         let id = (obj[obj.length - 1]);
         let mappingKey = this.mapping.inputNodeMap.get(id);
+        this.replaceMapping(mappingTable.tableTreeValue, mappingKey);
+      },
+      changeInputSelectNodeTree(obj) {
+        let id = obj.id;
+        let mappingKey = this.findMappingNodeIn(id, mappingTableOut.tableTreeValue);
         this.replaceMapping(mappingTable.tableTreeValue, mappingKey);
       },
       replaceMapping(nodeList, mappingKey) {
@@ -1851,7 +1877,9 @@
           return map;
         }
         nodeList.forEach((item) => {
-          map[item.indexKey] = item.inputNode;
+          if (item.inputNode !== undefined && item.indexKey !== undefined) {
+          map[item.inputNode] = item.indexKey;
+        }
           this.buildUpdateMapping(item.children, map);
         });
         return map;
@@ -1999,16 +2027,23 @@
           let code = res.errCode;
           if (code === 0) {
             for (let k of Object.keys(res.data.indexMap)) {
-              this.mappingMap.set(k, res.data.indexMap[k]);
+              this.mappingMap.set(res.data.indexMap[k], k);
             };
             mappingTable.id = res.data.id;
-            this.load(JSON.stringify(model), API_DATA_TREE_OUTPUT.detail, 'post', true).then((res) => {
+            this.load(JSON.stringify(model), API_DATA_TREE_INPUT.detail, 'post', true).then((res) => {
               let code = res.errCode;
               if (code === 0) {
                 mappingTable.tableTreeValue.splice(0, this.table.data.length);
                 mappingTable.tableTreeValue = this.buildNode(res.data.dataNodeList);
               }
             });
+            this.load(JSON.stringify(model), API_DATA_TREE_OUTPUT.detail, 'post', true).then((res) => {
+              let code = res.errCode;
+            if (code === 0) {
+              mappingTableOut.tableTreeValue.splice(0, this.table.data.length);
+              mappingTableOut.tableTreeValue = this.buildNode(res.data.dataNodeList);
+            }
+          });
           } else {
           }
         });
