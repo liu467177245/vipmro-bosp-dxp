@@ -490,24 +490,24 @@
                   <vipmro-button :title="'保存'" @click="saveMapping" :disabled="!saveBtnShow"></vipmro-button>
                 </vipmro-operation-button>
               </vipmro-layout-top>
-
-
-              <vipmro-layout-left width="675.5px">
+              <vipmro-layout-left width="375.5px">
                 <vipmro-tabletree
-                  v-model="mappingTable.tableTreeValue"
-                  :tabletreeHeader="mappingTable.tableTreeHeader"
+                  v-model="mappingTableIn.tableTreeValue"
+                  :tabletreeHeader="mappingTableIn.tableTreeHeader"
                   :openAll="true"
                   @clickRow="selectInputMapping"
                 ></vipmro-tabletree>
               </vipmro-layout-left>
+
               <vipmro-layout-left width="800px">
                 <vipmro-tabletree
-                  v-model="mappingTableOut.tableTreeValue"
-                  :tabletreeHeader="mappingTableOut.tableTreeHeader"
+                  v-model="mappingTable.tableTreeValue"
+                  :tabletreeHeader="mappingTable.tableTreeHeader"
                   :openAll="true"
                   @clickRow="changeInputSelectNodeTree"
                 ></vipmro-tabletree>
               </vipmro-layout-left>
+
 
             </template>
 
@@ -1003,7 +1003,7 @@
   import {button, editHeight, table, dict} from './data';
   import {vText, vNumber} from '../common/validator';
   import {detail, radios, select, connectProtocolIn, connectProtocolOut, inputTree, outputTree, ruleTable, ruleButton,
-    ruleEditHeight, ruleDetailForm, ruleImportTable, mappingTable, mappingTableOut, selectInputTable, scriptText} from './detailData';
+    ruleEditHeight, ruleDetailForm, ruleImportTable, mappingTable, mappingTableIn, selectInputTable, scriptText} from './detailData';
   import xml2js from 'xml2js';
 
   export default {
@@ -1019,7 +1019,7 @@
         ruleDetailForm,
         ruleImportTable,
         mappingTable,
-        mappingTableOut,
+        mappingTableIn,
         selectInputTable,
         scriptEngine: JSON.parse(JSON.stringify(scriptText)),
         radios,
@@ -1658,7 +1658,8 @@
         }
         let id = obj.id;
         selectInputTable.chooseId = id;
-        let inputIndexKey = this.findMappingNode(id, mappingTable.tableTreeValue);
+        let inputIndexKey = this.findMappingNode(id, mappingTableIn.tableTreeValue);
+        selectInputTable.chooseValue = inputIndexKey;
         if (inputIndexKey == null || inputIndexKey.length === 0) {
           selectInputTable.selectTreeValue.splice(0, selectInputTable.selectTreeValue.length);
           return;
@@ -1687,7 +1688,7 @@
         for (let k = 0; k < nodeList.length; k++) {
           let node = nodeList[k];
           if (id === node.id) {
-            return node.inputNode;
+            return node.indexKey;
           }
           if (node.children != null) {
             result = this.findMappingNode(id, node.children);
@@ -1725,7 +1726,7 @@
       },
       changeInputSelectNodeTree(obj) {
         let id = obj.id;
-        let mappingKey = this.findMappingNodeIn(id, mappingTableOut.tableTreeValue);
+        let mappingKey = this.findMappingNodeIn(id, mappingTable.tableTreeValue);
         this.replaceMapping(mappingTable.tableTreeValue, mappingKey);
       },
       replaceMapping(nodeList, mappingKey) {
@@ -1736,8 +1737,8 @@
           if (item.children != null) {
              this.replaceMapping(item.children, mappingKey);
           }
-          if (item.id === selectInputTable.chooseId) {
-            item.inputNode = mappingKey.indexKey;
+          if (item.id === mappingKey.id) {
+            item.inputNode = selectInputTable.chooseValue;
           }
         });
       },
@@ -1877,9 +1878,7 @@
           return map;
         }
         nodeList.forEach((item) => {
-          if (item.inputNode !== undefined && item.indexKey !== undefined) {
-          map[item.inputNode] = item.indexKey;
-        }
+          map[item.indexKey] = item.inputNode;
           this.buildUpdateMapping(item.children, map);
         });
         return map;
@@ -2027,21 +2026,21 @@
           let code = res.errCode;
           if (code === 0) {
             for (let k of Object.keys(res.data.indexMap)) {
-              this.mappingMap.set(res.data.indexMap[k], k);
+              this.mappingMap.set(k, res.data.indexMap[k]);
             };
             mappingTable.id = res.data.id;
-            this.load(JSON.stringify(model), API_DATA_TREE_INPUT.detail, 'post', true).then((res) => {
+            this.load(JSON.stringify(model), API_DATA_TREE_OUTPUT.detail, 'post', true).then((res) => {
               let code = res.errCode;
               if (code === 0) {
                 mappingTable.tableTreeValue.splice(0, this.table.data.length);
                 mappingTable.tableTreeValue = this.buildNode(res.data.dataNodeList);
               }
             });
-            this.load(JSON.stringify(model), API_DATA_TREE_OUTPUT.detail, 'post', true).then((res) => {
+            this.load(JSON.stringify(model), API_DATA_TREE_INPUT.detail, 'post', true).then((res) => {
               let code = res.errCode;
             if (code === 0) {
-              mappingTableOut.tableTreeValue.splice(0, this.table.data.length);
-              mappingTableOut.tableTreeValue = this.buildNode(res.data.dataNodeList);
+              mappingTableIn.tableTreeValue.splice(0, this.table.data.length);
+              mappingTableIn.tableTreeValue = this.buildNode(res.data.dataNodeList);
             }
           });
           } else {
