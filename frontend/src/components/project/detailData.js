@@ -12,20 +12,23 @@ export let detail = {
     title: '输入格式',
     name: 'inPutData'
   }, {
+    title: '前置脚本',
+    name: 'prefix'
+  }, {
     title: '输出格式',
     name: 'outPutData'
   }, {
     title: '映射关系',
     name: 'mapping'
   }, {
-    title: '输出协议',
-    name: 'outPutConnect'
-  }, {
     title: '规则',
     name: 'rule'
   }, {
-    title: '脚本',
+    title: '后置脚本',
     name: 'script'
+  }, {
+    title: '输出协议',
+    name: 'outPutConnect'
   }, {
     title: '测试',
     name: 'testing'
@@ -227,6 +230,9 @@ export let select = {
     }, {
       value: 3,
       text: '截取'
+    }, {
+      value: 4,
+      text: '函数脚本'
     }]
   },
   scriptEngineType: {
@@ -480,4 +486,89 @@ export let selectInputTable = {
 export let scriptText = {
   content: '',
   type: null
+};
+export let globalScripTable = {
+  dialogVisible: false,
+  colHeaders: ['', 'id', '函数名称', '语言', '使用简介'],
+  columns: [{
+    data: 'checked',
+    cellType: 'checkbox',
+    width: '50'
+  }, {
+    data: 'id',
+    cellType: 'number',
+    width: '80'
+  }, {
+    data: 'name',
+    cellType: 'text',
+    width: '100'
+  }, {
+    data: 'language',
+    width: '80',
+    /* 下拉 */
+    cellType: 'text'
+  }, {
+    data: 'desc',
+    cellType: 'text',
+    width: '350'
+  }],
+  data: [],
+  total: null,
+  currentPage: 0,
+  dataDicts: [{
+    'nameKey': 'language',
+    'dictItems': [ {
+      'key': 1,
+      'value': 'groovy'
+    }]
+  }],
+  type: 1,
+  width: '1000px'
+};
+export let projectScriptTable = {
+  dialogVisible: false,
+  colHeaders: ['', 'id', '名称', '语言', '描述', '内容', '创建时间'],
+  columns: [{
+    data: 'checked',
+    cellType: 'checkbox',
+    width: '50'
+  }, {
+    data: 'id',
+    cellType: 'number',
+    width: '50'
+  }, {
+    data: 'name',
+    cellType: 'text',
+    width: '100'
+  }, {
+    data: 'language',
+    width: '60',
+    /* 下拉 */
+    cellType: 'text'
+  }, {
+    data: 'content',
+    cellType: 'text',
+    width: '200'
+  }, {
+    data: 'desc',
+    cellType: 'text',
+    width: '200'
+  }, {
+    data: 'createDatetime',
+    cellType: 'text',
+    width: '200'
+  }],
+  data: [],
+  total: null,
+  currentPage: 1,
+  pageSize: 20,
+  dataDicts: [{
+    nameKey: 'language',
+    dictItems: [{
+      value: 1,
+      text: 'groovy'
+    }]
+  }],
+  type: 1,
+  width: '1000px'
 };

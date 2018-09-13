@@ -9,6 +9,23 @@
   .vipmro-json-editor{
     width: 100%!important;
   }
+  .myInput{
+    margin-left: 150px;
+    margin-bottom: 10px;
+    width: 188px;
+    height: 28px;
+    padding: 0 15px;
+    float: left;
+    font-size: inherit;
+    border: 1px solid #d8dce5;
+    border-radius: 4px;
+    background-color: #fff;
+  }
+  .mylable{
+    margin-left: 150px;
+    font-size: large;
+    background-color: yellow;
+  }
 </style>
 
 <template>
@@ -357,7 +374,7 @@
                       :width="220"
                     ></vipmro-select>
                   </vipmro-form-item>
-                  <vipmro-button title="导入" :top="5" @click="dataTreeInputImportShow">
+                  <vipmro-button title="导入" :top="5" @click="showDataTreeInputImport">
 
                   </vipmro-button>
                   <div class="webui-button" style="margin-left: 68px">
@@ -399,6 +416,10 @@
               </vipmro-layout-main>
             </template>
 
+            <template slot="prefix">
+
+            </template>
+
             <template slot="outPutData">
               <vipmro-layout-top v-model="ruleEditHeight.top">
                 <vipmro-operation-button>
@@ -415,7 +436,7 @@
                       :width="220"
                     ></vipmro-select>
                   </vipmro-form-item>
-                  <vipmro-button title="导入" :top="5" @click="dataTreeOutputImportShow">
+                  <vipmro-button title="导入" :top="5" @click="showDataTreeOutputImport">
                   </vipmro-button>
                   <div class="webui-button" style="margin-left: 68px">
                     <vipmro-layout-left :width="'500px'" style="border: 1px solid #d8dce5;height: 600px;overflow: scroll;">
@@ -456,25 +477,53 @@
                         </vipmro-form-item>
                       </vipmro-cols>
                       <vipmro-cols>
-                        <vipmro-form-item type="paramFilteType" title="过滤类型">
-                          <vipmro-select
-                            :options="select.filterType.selectOptions"
-                            v-model="chooseNode.output.dataFilter.filterType"
-                            :readonly="!saveBtnShow"
-                            :width="220"
-                          ></vipmro-select>
+                        <vipmro-form-item type="paramFilteType"  title="函数">
+                          <vipmro-button
+                            title="+系统"
+                            @click="showGlobalScript"
+                            :top="2"
+                          ></vipmro-button>
+                          <vipmro-button
+                            title="+自定义"
+                            :top="2"
+                          ></vipmro-button>
                         </vipmro-form-item>
+
+                        <div>
+                        <template v-for="(dataFilter,index) in chooseNode.output.dataFilter">
+                          <vipmro-cols>
+                            <div style="float: left;width: 83.7777%">
+                              <label class="mylable">{{dataFilter.name}}</label>
+                            </div>
+                            <vipmro-button
+                              title="删除"
+                              :top="0"
+                              @click="deleteDataFilter(index, chooseNode)"
+                            ></vipmro-button>
+                          </vipmro-cols>
+                          <template v-if="dataFilter.paramsCount != null">
+                            <template v-for="(props,index) in dataFilter.args" v-if="index<=dataFilter.paramsCount">
+                              <vipmro-cols :cols="24">
+                                <vipmro-input style="margin-left: 150px" v-model="dataFilter.args[index]" :width="220"></vipmro-input>
+                              </vipmro-cols>
+                            </template>
+                          </template>
+                          <template v-if="dataFilter.paramsCount == null">
+                            <vipmro-add-html
+                              v-model="dataFilter.args"
+                              type="String"
+                            >
+                              <template slot-scope="props">
+                                <vipmro-cols :cols="12">
+                                  <vipmro-input style="margin-left: 150px" :width="220" v-model="dataFilter.args[props.index]"></vipmro-input>
+                                </vipmro-cols>
+                              </template>
+                            </vipmro-add-html>
+                          </template>
+                        </template>
+                        </div>
                         <vipmro-cols>
-                          <vipmro-form-item type="subStringIndex" title="起始"  v-show="chooseNode.output.dataFilter.filterType === 3">
-                            <vipmro-input v-model="chooseNode.dataFilterSelect.subString.params.beginIndex" :top="2" width="108"
-                                          :readonly="!saveBtnShow"
-                                          placeholder="截取起点"
-                            ></vipmro-input>
-                            <vipmro-input v-model="chooseNode.dataFilterSelect.subString.params.endIndex" :top="2" width="108"
-                                          :readonly="!saveBtnShow"
-                                          placeholder="截取终点"
-                            ></vipmro-input>
-                          </vipmro-form-item>
+
 
                         </vipmro-cols>
                       </vipmro-cols>
@@ -886,7 +935,7 @@
                     <vipmro-form-item type="type" title="脚本类型">
                       <vipmro-select
                         :options="select.scriptEngineType.selectOptions"
-                        v-model="scriptEngine.type"
+                        v-model="postScriptEngine.type"
                         :readonly="!saveBtnShow"
                         :width="220"
                       ></vipmro-select>
@@ -894,7 +943,7 @@
                   </vipmro-cols>
                   <vipmro-cols :cols="24">
                     <vipmro-form-item type="content" title="code">
-                      <vipmro-textarea v-model="scriptEngine.content"
+                      <vipmro-textarea v-model="postScriptEngine.content"
                                        :top="2"
                                        width="800"
                                        placeholder=""
@@ -995,6 +1044,15 @@
         ></vipmro-textarea>
       </vipmro-layout-main>
     </vipmro-dialog>
+    <vipmro-dialog  v-model="globalScripTable.dialogVisible"
+                    @confirm="importGlobalScript">
+      <vipmro-table
+        :colHeaders="globalScripTable.colHeaders"
+        :columns="globalScripTable.columns"
+        :data="globalScripTable.data"
+        :dataDicts="globalScripTable.dataDicts"
+      ></vipmro-table>
+    </vipmro-dialog>
   </div>
 </template>
 
@@ -1004,7 +1062,8 @@
   import {button, editHeight, table, dict} from './data';
   import {vText, vNumber} from '../common/validator';
   import {detail, radios, select, connectProtocolIn, connectProtocolOut, inputTree, outputTree, ruleTable, ruleButton,
-    ruleEditHeight, ruleDetailForm, ruleImportTable, mappingTable, selectInputTable, scriptText} from './detailData';
+    ruleEditHeight, ruleDetailForm, ruleImportTable, mappingTable, selectInputTable, scriptText,
+    globalScripTable, projectScriptTable} from './detailData';
   import xml2js from 'xml2js';
 
   export default {
@@ -1021,7 +1080,9 @@
         ruleImportTable,
         mappingTable,
         selectInputTable,
-        scriptEngine: JSON.parse(JSON.stringify(scriptText)),
+        postScriptEngine: JSON.parse(JSON.stringify(scriptText)),
+        globalScripTable: JSON.parse(JSON.stringify(globalScripTable)),
+        projectScriptTable: JSON.parse(JSON.stringify(projectScriptTable)),
         radios,
         select,
         detail,
@@ -1041,20 +1102,8 @@
             name: null,
             id: null,
             dataType: null,
-            dataFilter: {
-              filterType: null,
-              params: {
-              }
-            },
+            dataFilter: [],
             defaultValue: ''
-          },
-          dataFilterSelect: {
-            subString: {
-              params: {
-                beginIndex: null,
-                endIndex: null
-              }
-            }
           }
         },
         connectInShow: [{
@@ -1213,6 +1262,8 @@
             this.loadOutputTree(this.detailForm.id);
             this.loadMapping(this.detailForm.id);
             this.loadDataRule(this.detailForm.id);
+            this.loadGlobalScript();
+            this.loadProjectScript(this.detailForm.id);
             /****
              *
              * @type {*}
@@ -1422,6 +1473,9 @@
       delRule() {
         this.openRuleBatch(-1, '确定删除所选数据？');
       },
+      deleteDataFilter(index, chooseNode) {
+        chooseNode.output.dataFilter.splice(index, 1);
+      },
       deleteRule() {
         let ids = '';
         this.ruleTable.data.forEach(item => {
@@ -1489,7 +1543,6 @@
               type: this.inPutDataTree.dataFormat.type
           }
         };
-        console.log();
         let address;
         if (this.inPutDataTree.id == null || this.inPutDataTree.id === 'undefined') {
             address = API_DATA_TREE_INPUT.add;
@@ -1606,8 +1659,8 @@
       saveScript() {
         let model = {
           projectId: this.detailForm.projectId,
-          content: this.scriptEngine.content,
-          type: this.scriptEngine.type
+          content: this.postScriptEngine.content,
+          type: this.postScriptEngine.type
         };
         this.load(JSON.stringify(model), API_SCRIPT_ENGINE.update, 'post').then((res) => {
           if (res.errCode === 0) {
@@ -1970,8 +2023,8 @@
         });
       },
       loadScriptEngine(scriptEngine) {
-        this.scriptEngine.content = scriptEngine.content;
-        this.scriptEngine.type = scriptEngine.type;
+        this.postScriptEngine.content = scriptEngine.content;
+        this.postScriptEngine.type = scriptEngine.type;
       },
       loadOutputTree(id) {
         let model = {
@@ -2031,6 +2084,35 @@
               ruleImportTable.data.push(item);
             });
             ruleImportTable.total = res.data.totalCount;
+          }
+        });
+      },
+      loadGlobalScript() {
+        let model = {
+        };
+        this.load(JSON.stringify(model), API_SCRIPT_ENGINE.globalList, 'post', true).then((res) => {
+          let code = res.errCode;
+          if (code === 0) {
+            this.globalScripTable.data.splice(0, this.table.data.length);
+            res.data.data.forEach(item => {
+              this.globalScripTable.data.push(item);
+            });
+            this.globalScripTable.total = res.data.totalCount;
+          }
+        });
+      },
+      loadProjectScript(id) {
+        let model = {
+            projectId: id
+        };
+        this.load(JSON.stringify(model), API_SCRIPT_ENGINE.projectList, 'post', true).then((res) => {
+          let code = res.errCode;
+          if (code === 0) {
+            projectScriptTable.data.splice(0, this.table.data.length);
+            res.data.data.forEach(item => {
+              projectScriptTable.data.push(item);
+            });
+            projectScriptTable.total = res.data.totalCount;
           }
         });
       },
@@ -2099,6 +2181,29 @@
           children: this.buildDataNode(jsonObject)
         }];
       },
+      importGlobalScript() {
+        let chooseItem;
+        this.globalScripTable.data.forEach(item => {
+          if (item.checked) {
+            chooseItem = item;
+          }
+        });
+        if (chooseItem === '') {
+          this.$message({type: 'error', message: '请选择一条数据', showClose: true});
+          return;
+        };
+        let filter = Object.create(null);
+        filter.id = chooseItem.id;
+        filter.paramsCount = chooseItem.paramsCount;
+        filter.name = chooseItem.name;
+        if (chooseItem.paramsCount != null) {
+          filter.args = [];
+          filter.args.length = chooseItem.paramsCount;
+        } else {
+          filter.args = [];
+        }
+        this.chooseNode.output.dataFilter.push(filter);
+      },
       /***
        * object对象转换成dataNode
        * @param object
@@ -2147,18 +2252,20 @@
       output_handleDragEnd(draggingNode, dropNode, dropType, ev) {
       },
       output_handleNodeClick(data, node, component) {
-        if (data.dataFilter.filterType === 3) {
-          this.chooseNode.output = data;
-          if (data.dataFilter.params == null) {
-            this.chooseNode.dataFilterSelect.subString.params = JSON.parse(JSON.stringify(this.chooseNode.dataFilterSelect.subString.params));
-          } else {
-            this.chooseNode.dataFilterSelect.subString.params = data.dataFilter.params;
-          }
-        } else {
-          this.chooseNode.dataFilterSelect.subString.params = JSON.parse(JSON.stringify(this.chooseNode.dataFilterSelect.subString.params));
-          this.chooseNode.output = data;
+        this.chooseNode.output = data;
+        /**
+         *  if (data.dataFilter != null && data.dataFilter.length > 0) {
+          this.chooseNode.output.dataFilter.forEach(dataFilter => {
+            this.globalScripTable.data.forEach(item => {
+              if (dataFilter.id === item.id) {
+                console.log(dataFilter);
+                console.log(item);
+                dataFilter.name = item.name;
+              }
+            });
+          });
         }
-        console.log();
+         */
       },
       testing() {
         let model = {
@@ -2174,11 +2281,14 @@
           }
         });
       },
-      dataTreeInputImportShow() {
+      showDataTreeInputImport() {
         this.importInputDataTreeDialog.dialogVisible = true;
       },
-      dataTreeOutputImportShow() {
+      showDataTreeOutputImport() {
         this.importOutputDataTreeDialog.dialogVisible = true;
+      },
+      showGlobalScript() {
+        this.globalScripTable.dialogVisible = true;
       }
     },
     created() {

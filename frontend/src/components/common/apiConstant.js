@@ -57,5 +57,8 @@ export const API_DATA_MAPPING = {
   update: `${baseApi}/v1.0.0/dataMapper/update`
 };
 export const API_SCRIPT_ENGINE = {
-  update: `${baseApi}/v1.0.0/scriptEngine/update`
+  update: `${baseApi}/v1.0.0/scriptEngine/update`,
+  globalList: `${baseApi}/v1.0.0/script/global/list`,
+  projectList: `${baseApi}/v1.0.0/script/project/list`
 };
+
