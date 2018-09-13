@@ -486,6 +486,7 @@
                           <vipmro-button
                             title="+自定义"
                             :top="2"
+                            @click="showProjectScript"
                           ></vipmro-button>
                         </vipmro-form-item>
 
@@ -512,6 +513,7 @@
                             <vipmro-add-html
                               v-model="dataFilter.args"
                               type="String"
+                              :isLastShowMinus="true"
                             >
                               <template slot-scope="props">
                                 <vipmro-cols :cols="12">
@@ -1051,6 +1053,17 @@
         :data="globalScripTable.data"
         :dataDicts="globalScripTable.dataDicts"
       ></vipmro-table>
+    </vipmro-dialog>
+    <vipmro-dialog v-model="projectScriptTable.dialogVisible">
+      <vipmro-layout-top
+      >
+        <vipmro-button
+          title="新增"
+        ></vipmro-button>
+      </vipmro-layout-top>
+      <vipmro-layout-main>
+        <vipmro-button title="23"></vipmro-button>
+      </vipmro-layout-main>
     </vipmro-dialog>
   </div>
 </template>
@@ -2324,7 +2337,11 @@
       },
       showGlobalScript() {
         this.globalScripTable.dialogVisible = true;
+      },
+      showProjectScript() {
+        this.projectScriptTable.dialogVisible = true;
       }
+
     },
     created() {
       this.search();
